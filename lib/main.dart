@@ -1,0 +1,64 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'core/constants/app_constants.dart';
+import 'core/theme/app_theme.dart';
+import 'routes/app_pages.dart';
+import 'routes/app_routes.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Init local storage
+  await GetStorage.init();
+
+  // Lock to portrait
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Status bar style
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
+
+  runApp(const TerangaSkillsApp());
+}
+
+class TerangaSkillsApp extends StatelessWidget {
+  const TerangaSkillsApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final storage = GetStorage();
+    final token = storage.read<String>(AppConstants.accessTokenKey);
+    final initialRoute = (token != null && token.isNotEmpty)
+        ? AppRoutes.home
+        : AppRoutes.login;
+
+    return GetMaterialApp(
+      title: 'TerangaSkills',
+      debugShowCheckedModeBanner: false,
+
+      // Theme
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
+
+      // Routing
+      initialRoute: initialRoute,
+      getPages: AppPages.pages,
+      defaultTransition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 250),
+
+      // Locale
+      locale: const Locale('fr', 'FR'),
+      fallbackLocale: const Locale('fr', 'FR'),
+    );
+  }
+}
