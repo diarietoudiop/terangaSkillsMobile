@@ -31,22 +31,29 @@ class ComplaintModel {
   });
 
   factory ComplaintModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map && !json.containsKey('title'))
+        ? json['data'] as Map<String, dynamic>
+        : json;
     return ComplaintModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      photoUrl: json['photoUrl'] as String?,
-      latitude: (json['latitude'] as num?)?.toDouble(),
-      longitude: (json['longitude'] as num?)?.toDouble(),
-      status: json['status'] as String? ?? 'OPEN',
-      citizenId: json['citizenId'] as String,
-      citizen: json['citizen'] != null
-          ? UserModel.fromJson(json['citizen'] as Map<String, dynamic>)
+      id: map['id']?.toString() ?? '',
+      title: map['title'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      photoUrl: map['photoUrl'] as String?,
+      latitude: (map['latitude'] as num?)?.toDouble(),
+      longitude: (map['longitude'] as num?)?.toDouble(),
+      status: map['status'] as String? ?? 'OPEN',
+      citizenId: map['citizenId']?.toString() ?? '',
+      citizen: map['citizen'] != null
+          ? UserModel.fromJson(map['citizen'] as Map<String, dynamic>)
           : null,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      history: json['history'] != null
-          ? (json['history'] as List)
+      createdAt: map['createdAt'] != null
+          ? DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.tryParse(map['updatedAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      history: map['history'] != null
+          ? (map['history'] as List)
               .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,

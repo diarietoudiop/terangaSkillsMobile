@@ -12,14 +12,15 @@ class DashboardStatsModel {
   });
 
   factory DashboardStatsModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map) ? json['data'] as Map<String, dynamic> : json;
     return DashboardStatsModel(
-      users: UsersStats.fromJson(json['users'] as Map<String, dynamic>),
+      users: UsersStats.fromJson((map['users'] ?? {}) as Map<String, dynamic>),
       administrativeRequests: AdminRequestsStats.fromJson(
-          json['administrativeRequests'] as Map<String, dynamic>),
+          (map['administrativeRequests'] ?? {}) as Map<String, dynamic>),
       complaints:
-          ComplaintsStats.fromJson(json['complaints'] as Map<String, dynamic>),
+          ComplaintsStats.fromJson((map['complaints'] ?? {}) as Map<String, dynamic>),
       missingDocuments: MissingDocsStats.fromJson(
-          json['missingDocuments'] as Map<String, dynamic>),
+          (map['missingDocuments'] ?? {}) as Map<String, dynamic>),
     );
   }
 }

@@ -24,19 +24,20 @@ class UserModel {
   String get fullName => '$firstName $lastName';
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map) ? json['data'] as Map<String, dynamic> : json;
     return UserModel(
-      id: json['id']?.toString() ?? '',
-      email: json['email']?.toString() ?? '',
-      firstName: json['firstName']?.toString() ?? '',
-      lastName: json['lastName']?.toString() ?? '',
-      phone: json['phone']?.toString(),
-      role: json['role']?.toString() ?? 'CITIZEN',
-      isActive: json['isActive'] as bool? ?? true,
-      createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
+      id: map['id']?.toString() ?? map['_id']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      firstName: map['firstName']?.toString() ?? '',
+      lastName: map['lastName']?.toString() ?? '',
+      phone: map['phone']?.toString(),
+      role: map['role']?.toString() ?? 'CITIZEN',
+      isActive: map['isActive'] as bool? ?? true,
+      createdAt: map['createdAt'] != null
+          ? DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now()
           : DateTime.now(),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.tryParse(json['updatedAt'].toString()) ?? DateTime.now()
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.tryParse(map['updatedAt'].toString()) ?? DateTime.now()
           : DateTime.now(),
     );
   }

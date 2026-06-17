@@ -18,14 +18,17 @@ class DocumentModel {
   });
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map && !json.containsKey('name')) ? json['data'] as Map<String, dynamic> : json;
     return DocumentModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      fileUrl: json['fileUrl'] as String,
-      qrCodeUrl: json['qrCodeUrl'] as String?,
-      isVerified: json['isVerified'] as bool? ?? false,
-      administrativeRequestId: json['administrativeRequestId'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      id: map['id']?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      fileUrl: map['fileUrl']?.toString() ?? '',
+      qrCodeUrl: map['qrCodeUrl'] as String?,
+      isVerified: map['isVerified'] as bool? ?? false,
+      administrativeRequestId: map['administrativeRequestId'] as String?,
+      createdAt: map['createdAt'] != null
+          ? DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
     );
   }
 
@@ -52,12 +55,15 @@ class DocumentVerificationModel {
   });
 
   factory DocumentVerificationModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map && !json.containsKey('isVerified') && !json.containsKey('isValid'))
+        ? json['data'] as Map<String, dynamic>
+        : json;
     return DocumentVerificationModel(
-      isValid: json['isVerified'] as bool? ?? false,
-      document: json['document'] != null
-          ? DocumentModel.fromJson(json['document'] as Map<String, dynamic>)
-          : (json['id'] != null ? DocumentModel.fromJson(json) : null),
-      message: json['message'] as String?,
+      isValid: (map['isVerified'] ?? map['isValid']) as bool? ?? false,
+      document: map['document'] != null
+          ? DocumentModel.fromJson(map['document'] as Map<String, dynamic>)
+          : (map['id'] != null ? DocumentModel.fromJson(map) : null),
+      message: map['message'] as String?,
     );
   }
 }

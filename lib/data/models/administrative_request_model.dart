@@ -34,26 +34,33 @@ class AdministrativeRequestModel {
   });
 
   factory AdministrativeRequestModel.fromJson(Map<String, dynamic> json) {
+    final map = (json['data'] is Map && !json.containsKey('title'))
+        ? json['data'] as Map<String, dynamic>
+        : json;
     return AdministrativeRequestModel(
-      id: json['id'] as String,
-      type: json['type'] as String? ?? 'OTHER',
-      title: json['title'] as String,
-      description: json['description'] as String,
-      data: json['data'],
-      attachments: List<String>.from(json['attachments'] as List? ?? []),
-      status: json['status'] as String? ?? 'PENDING',
-      citizenId: json['citizenId'] as String,
-      citizen: json['citizen'] != null
-          ? UserModel.fromJson(json['citizen'] as Map<String, dynamic>)
+      id: map['id']?.toString() ?? '',
+      type: map['type'] as String? ?? 'OTHER',
+      title: map['title'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      data: map['data'],
+      attachments: List<String>.from(map['attachments'] as List? ?? []),
+      status: map['status'] as String? ?? 'PENDING',
+      citizenId: map['citizenId']?.toString() ?? '',
+      citizen: map['citizen'] != null
+          ? UserModel.fromJson(map['citizen'] as Map<String, dynamic>)
           : null,
-      assignedAgentId: json['assignedAgentId'] as String?,
-      assignedAgent: json['assignedAgent'] != null
-          ? UserModel.fromJson(json['assignedAgent'] as Map<String, dynamic>)
+      assignedAgentId: map['assignedAgentId'] as String?,
+      assignedAgent: map['assignedAgent'] != null
+          ? UserModel.fromJson(map['assignedAgent'] as Map<String, dynamic>)
           : null,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      history: json['history'] != null
-          ? (json['history'] as List)
+      createdAt: map['createdAt'] != null
+          ? DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      updatedAt: map['updatedAt'] != null
+          ? DateTime.tryParse(map['updatedAt'].toString()) ?? DateTime.now()
+          : DateTime.now(),
+      history: map['history'] != null
+          ? (map['history'] as List)
               .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
