@@ -50,8 +50,10 @@ class AuthController extends GetxController {
     }
   }
 
-  bool get isLoggedIn =>
-      _storage.read<String>(AppConstants.accessTokenKey) != null;
+  bool get isLoggedIn {
+    final token = _storage.read<String>(AppConstants.accessTokenKey);
+    return token != null && token.isNotEmpty;
+  }
 
   void togglePasswordVisibility() =>
       isPasswordVisible.value = !isPasswordVisible.value;

@@ -6,6 +6,6 @@ class QrBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<DocumentRepository>(() => DocumentRepository());
-    Get.lazyPut<QrController>(() => QrController(repo: Get.find()));
+    Get.lazyPut<QrController>(() => QrController(repo: Get.find<DocumentRepository>()));
   }
 }

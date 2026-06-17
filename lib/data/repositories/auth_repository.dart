@@ -28,7 +28,7 @@ class AuthRepository {
       'password': password,
       'firstName': firstName,
       'lastName': lastName,
-      'phone': ?phone,
+      if (phone != null) 'phone': phone,
     });
     return AuthResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
