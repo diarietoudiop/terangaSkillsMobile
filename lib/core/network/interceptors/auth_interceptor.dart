@@ -18,11 +18,23 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    // 401 → clear token and redirect to login
-    if (err.response?.statusCode == 401) {
+    final statusCode = err.response?.statusCode;
+    final dataString = err.response?.data?.toString().toLowerCase() ?? '';
+    
+    // Clear token and redirect if unauthorized (401), forbidden (403), or token is missing/invalid
+    if (statusCode == 401 || 
+        statusCode == 403 || 
+        dataString.contains('token is missing') || 
+        dataString.contains('token is invalid') ||
+        dataString.contains('token is missing or invalid') ||
+        dataString.contains('authentication token')) {
+      
       _storage.remove(AppConstants.accessTokenKey);
       _storage.remove(AppConstants.userKey);
-      Get.offAllNamed(AppRoutes.login);
+      
+      if (Get.currentRoute != AppRoutes.login) {
+        Get.offAllNamed(AppRoutes.login);
+      }
     }
     handler.next(err);
   }
