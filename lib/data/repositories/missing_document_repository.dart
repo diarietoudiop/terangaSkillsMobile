@@ -19,10 +19,10 @@ class MissingDocumentRepository {
     final formData = FormData.fromMap({
       'title': title,
       'description': description,
-      'lastSeenLocation': ?lastSeenLocation,
+      if (lastSeenLocation != null) 'lastSeenLocation': lastSeenLocation,
       if (latitude != null) 'latitude': latitude.toString(),
       if (longitude != null) 'longitude': longitude.toString(),
-      'file': ?file,
+      if (file != null) 'file': file,
     });
     final response = await _apiClient.createMissingDocument(formData);
     return MissingDocumentModel.fromJson(response.data as Map<String, dynamic>);

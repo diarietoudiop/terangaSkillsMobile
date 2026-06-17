@@ -20,7 +20,7 @@ class ComplaintRepository {
       'description': description,
       if (latitude != null) 'latitude': latitude.toString(),
       if (longitude != null) 'longitude': longitude.toString(),
-      'file': ?file,
+      if (file != null) 'file': file,
     });
     final response = await _apiClient.createComplaint(formData);
     return ComplaintModel.fromJson(response.data as Map<String, dynamic>);

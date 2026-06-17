@@ -12,6 +12,7 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
+    final homeController = Get.find<HomeController>();
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       body: CustomScrollView(
@@ -69,15 +70,18 @@ class HomeTab extends StatelessWidget {
                 final initial = name.isNotEmpty ? name[0].toUpperCase() : 'U';
                 return Padding(
                   padding: const EdgeInsets.only(right: 24),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: AppColors.primary.withOpacity(0.15),
-                    child: Text(
-                      initial,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                  child: GestureDetector(
+                    onTap: homeController.openDrawer,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.primary.withOpacity(0.15),
+                      child: Text(
+                        initial,
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),

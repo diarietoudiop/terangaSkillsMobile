@@ -10,6 +10,7 @@ import '../../missing_docs/views/missing_docs_list_view.dart';
 import '../../dashboard/views/dashboard_view.dart';
 import '../controller/home_controller.dart';
 import '../widgets/home_tab.dart';
+import '../widgets/profile_drawer.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -25,6 +26,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
+          key: controller.scaffoldKey,
+          drawer: const ProfileDrawer(),
           body: IndexedStack(
             index: controller.currentIndex.value,
             children: _pages,

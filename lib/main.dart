@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'core/constants/app_constants.dart';
+import 'core/services/connectivity_service.dart';
 import 'core/theme/app_theme.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
@@ -12,6 +13,9 @@ void main() async {
 
   // Init local storage
   await GetStorage.init();
+
+  // Init Connectivity Service
+  Get.put(ConnectivityService(), permanent: true);
 
   // Lock to portrait
   await SystemChrome.setPreferredOrientations([

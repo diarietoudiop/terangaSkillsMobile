@@ -20,7 +20,7 @@ class AdministrativeRequestRepository {
       'title': title,
       'description': description,
       if (data != null) 'data': data.toString(),
-      'files': ?files,
+      if (files != null) 'files': files,
     });
     final response = await _apiClient.createAdminRequest(formData);
     return AdministrativeRequestModel.fromJson(

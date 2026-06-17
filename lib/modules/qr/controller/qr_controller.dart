@@ -27,15 +27,13 @@ class QrController extends GetxController {
   }
 
   String? _extractDocumentId(String raw) {
-    // Handles both full URL and plain ID
-    final uri = Uri.tryParse(raw);
-    if (uri != null && uri.pathSegments.isNotEmpty) {
-      return uri.pathSegments.last;
-    }
-    // Plain UUID format check
+    // Robustly extract standard 36-char UUID format from any URL or string
     final uuidRegex = RegExp(
-        r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
-    if (uuidRegex.hasMatch(raw)) return raw;
+        r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
+    final match = uuidRegex.firstMatch(raw);
+    if (match != null) {
+      return match.group(0);
+    }
     return null;
   }
 
