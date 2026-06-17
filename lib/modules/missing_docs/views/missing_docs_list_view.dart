@@ -57,7 +57,7 @@ class MissingDocsListView extends GetView<MissingDocsController> {
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
-                      Iconsax.document_search5,
+                      Iconsax.search_status5,
                       size: 64,
                       color: AppColors.grey500,
                     ),

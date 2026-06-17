@@ -122,7 +122,7 @@ class HomeTab extends StatelessWidget {
                         onTap: () => Get.toNamed(AppRoutes.createComplaint),
                       ),
                       _PremiumActionCard(
-                        icon: Iconsax.document_search,
+                        icon: Iconsax.search_normal_1,
                         label: 'Document\nperdu',
                         iconColor: const Color(0xFF34D399), // Soft Green
                         onTap: () => Get.toNamed(AppRoutes.createMissingDoc),

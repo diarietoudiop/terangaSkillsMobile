@@ -84,7 +84,7 @@ class DashboardView extends GetView<DashboardController> {
                   child: _KpiCard(
                     label: 'Docs Perdus',
                     value: s.missingDocuments.total.toString(),
-                    icon: Iconsax.document_search,
+                    icon: Iconsax.search_normal_1,
                     color: AppColors.error,
                   ),
                 ),
