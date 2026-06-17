@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/connectivity_service.dart';
 import 'core/theme/app_theme.dart';
+import 'modules/auth/controller/auth_controller.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 
@@ -16,6 +17,9 @@ void main() async {
 
   // Init Connectivity Service
   Get.put(ConnectivityService(), permanent: true);
+
+  // Init Auth Controller globally
+  Get.put(AuthController(), permanent: true);
 
   // Lock to portrait
   await SystemChrome.setPreferredOrientations([
