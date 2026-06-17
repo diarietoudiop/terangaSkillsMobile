@@ -9,9 +9,12 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = _storage.read<String>(AppConstants.accessTokenKey);
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+    final path = options.path;
+    if (!path.contains('/auth/login') && !path.contains('/auth/register')) {
+      final token = _storage.read<String>(AppConstants.accessTokenKey);
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
     handler.next(options);
   }
