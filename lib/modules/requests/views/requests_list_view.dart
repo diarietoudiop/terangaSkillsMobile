@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -17,7 +18,7 @@ class RequestsListView extends GetView<RequestsController> {
         title: Text('Mes Demandes', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh_rounded),
+            icon: const Icon(Iconsax.refresh),
             onPressed: controller.fetchMyRequests,
           ),
         ],
@@ -73,24 +74,44 @@ class RequestsListView extends GetView<RequestsController> {
 
   Widget _buildEmpty() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.folder_open_rounded,
-              size: 72, color: AppColors.grey600),
-          const SizedBox(height: 16),
-          Text('Aucune demande', style: AppTextStyles.titleMedium),
-          const SizedBox(height: 8),
-          Text('Soumettez votre première demande !',
-              style: AppTextStyles.bodySmall
-                  .copyWith(color: AppColors.grey500)),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: () => Get.toNamed(AppRoutes.createRequest),
-            icon: const Icon(Icons.add_rounded),
-            label: const Text('Nouvelle demande'),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.darkCard.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Iconsax.folder_open5,
+                size: 64,
+                color: AppColors.grey500,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text('Aucune demande', style: AppTextStyles.titleMedium),
+            const SizedBox(height: 8),
+            Text(
+              'Soumettez votre première demande administrative en quelques clics !',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey500),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () => Get.toNamed(AppRoutes.createRequest),
+              icon: const Icon(Icons.add_rounded),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              label: const Text('Nouvelle demande'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -116,74 +137,104 @@ class _RequestCard extends StatelessWidget {
     final statusColor = StatusUtils.requestStatusColor(status);
     final statusLabel = StatusUtils.requestStatusLabel(status);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.darkCard.withOpacity(0.55),
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.darkCard,
-            borderRadius: BorderRadius.circular(16),
-            border:
-                const Border.fromBorderSide(BorderSide(color: AppColors.darkBorder)),
+        border: Border.all(
+          color: statusColor.withOpacity(0.22),
+          width: 0.8,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: AppColors.info.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(12),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Iconsax.document_text,
+                    color: statusColor,
+                    size: 24,
+                  ),
                 ),
-                child: const Icon(Icons.description_rounded,
-                    color: AppColors.info, size: 24),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(type,
-                        style: AppTextStyles.labelSmall
-                            .copyWith(color: AppColors.grey500)),
-                    const SizedBox(height: 2),
-                    Text(title,
-                        style: AppTextStyles.titleSmall,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        type,
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.grey500,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        title,
+                        style: AppTextStyles.titleSmall.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: statusColor.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(6),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: statusColor.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              statusLabel,
+                              style: AppTextStyles.labelSmall.copyWith(
+                                color: statusColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                          child: Text(
-                            statusLabel,
-                            style: AppTextStyles.labelSmall
-                                .copyWith(color: statusColor, fontSize: 10),
+                          const Spacer(),
+                          Text(
+                            '${date.day}/${date.month}/${date.year}',
+                            style: AppTextStyles.caption.copyWith(
+                              fontSize: 11,
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '${date.day}/${date.month}/${date.year}',
-                          style: AppTextStyles.caption,
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.chevron_right_rounded,
-                  color: AppColors.grey500, size: 20),
-            ],
+                const SizedBox(width: 12),
+                const Icon(
+                  Iconsax.arrow_right_3,
+                  color: AppColors.grey500,
+                  size: 16,
+                ),
+              ],
+            ),
           ),
         ),
       ),

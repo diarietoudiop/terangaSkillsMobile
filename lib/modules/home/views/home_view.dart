@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../routes/app_routes.dart';
@@ -46,9 +47,9 @@ class HomeView extends GetView<HomeController> {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: AppColors.primary.withOpacity(0.4),
+            blurRadius: 16,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -56,7 +57,7 @@ class HomeView extends GetView<HomeController> {
         onPressed: _onFabPressed,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        child: const Icon(Icons.add_rounded, size: 32, color: Colors.white),
+        child: const Icon(Icons.add_rounded, size: 30, color: Colors.white),
       ),
     );
   }
@@ -80,9 +81,14 @@ class HomeView extends GetView<HomeController> {
 
   Widget _buildBottomNav() {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        border: Border(top: BorderSide(color: AppColors.darkBorder, width: 1)),
+      decoration: BoxDecoration(
+        color: AppColors.darkSurface.withOpacity(0.95),
+        border: const Border(
+          top: BorderSide(
+            color: AppColors.darkBorder,
+            width: 0.8,
+          ),
+        ),
       ),
       child: BottomAppBar(
         color: Colors.transparent,
@@ -95,26 +101,30 @@ class HomeView extends GetView<HomeController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _NavItem(
-                      icon: Icons.home_rounded,
+                      icon: Iconsax.home,
+                      selectedIcon: Iconsax.home5,
                       label: 'Accueil',
                       index: 0,
                       current: controller.currentIndex.value,
                       onTap: () => controller.changeTab(0)),
                   _NavItem(
-                      icon: Icons.description_outlined,
+                      icon: Iconsax.document,
+                      selectedIcon: Iconsax.document5,
                       label: 'Demandes',
                       index: 1,
                       current: controller.currentIndex.value,
                       onTap: () => controller.changeTab(1)),
                   const SizedBox(width: 48), // FAB space
                   _NavItem(
-                      icon: Icons.report_outlined,
+                      icon: Iconsax.danger,
+                      selectedIcon: Iconsax.danger5,
                       label: 'Réclamations',
                       index: 2,
                       current: controller.currentIndex.value,
                       onTap: () => controller.changeTab(2)),
                   _NavItem(
-                      icon: Icons.search_rounded,
+                      icon: Iconsax.search_normal_1,
+                      selectedIcon: Iconsax.search_status5,
                       label: 'Documents',
                       index: 3,
                       current: controller.currentIndex.value,
@@ -129,6 +139,7 @@ class HomeView extends GetView<HomeController> {
 
 class _NavItem extends StatelessWidget {
   final IconData icon;
+  final IconData selectedIcon;
   final String label;
   final int index;
   final int current;
@@ -136,6 +147,7 @@ class _NavItem extends StatelessWidget {
 
   const _NavItem({
     required this.icon,
+    required this.selectedIcon,
     required this.label,
     required this.index,
     required this.current,
@@ -154,23 +166,26 @@ class _NavItem extends StatelessWidget {
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.primary.withOpacity(0.15)
+                    ? AppColors.primary.withOpacity(0.12)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon,
-                  color: isSelected ? AppColors.primary : AppColors.grey500,
-                  size: 22),
+              child: Icon(
+                isSelected ? selectedIcon : icon,
+                color: isSelected ? AppColors.primary : AppColors.grey500,
+                size: 22,
+              ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 3),
             Text(
               label,
               style: AppTextStyles.labelSmall.copyWith(
                 color: isSelected ? AppColors.primary : AppColors.grey500,
                 fontSize: 10,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
           ],

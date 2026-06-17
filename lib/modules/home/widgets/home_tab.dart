@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../routes/app_routes.dart';
@@ -15,7 +16,7 @@ class HomeTab extends StatelessWidget {
       backgroundColor: AppColors.darkBackground,
       body: CustomScrollView(
         slivers: [
-          // ─── App Bar Premium ──────────────────────────────
+          // ─── App Bar Premium ───
           SliverAppBar(
             expandedHeight: 180,
             pinned: true,
@@ -84,7 +85,8 @@ class HomeTab extends StatelessWidget {
               }),
             ],
           ),
-          // ─── Quick Actions Premium ─────────────────────────
+
+          // ─── Quick Actions Premium ───
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -98,7 +100,7 @@ class HomeTab extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
@@ -108,25 +110,25 @@ class HomeTab extends StatelessWidget {
                     childAspectRatio: 1.15,
                     children: [
                       _PremiumActionCard(
-                        icon: Icons.description_outlined,
+                        icon: Iconsax.document_text,
                         label: 'Demande\nadministrative',
                         iconColor: const Color(0xFF60A5FA), // Soft Blue
                         onTap: () => Get.toNamed(AppRoutes.createRequest),
                       ),
                       _PremiumActionCard(
-                        icon: Icons.report_outlined,
+                        icon: Iconsax.danger,
                         label: 'Signaler une\nréclamation',
                         iconColor: const Color(0xFFF87171), // Soft Red
                         onTap: () => Get.toNamed(AppRoutes.createComplaint),
                       ),
                       _PremiumActionCard(
-                        icon: Icons.find_in_page_outlined,
+                        icon: Iconsax.document_search,
                         label: 'Document\nperdu',
                         iconColor: const Color(0xFF34D399), // Soft Green
                         onTap: () => Get.toNamed(AppRoutes.createMissingDoc),
                       ),
                       _PremiumActionCard(
-                        icon: Icons.qr_code_scanner_rounded,
+                        icon: Iconsax.scan,
                         label: 'Scanner\nQR Code',
                         iconColor: const Color(0xFFA78BFA), // Soft Purple
                         onTap: () => Get.toNamed(AppRoutes.qrScan),
@@ -134,7 +136,8 @@ class HomeTab extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 32),
-                  // ─── Recent Banner Premium ─────────────────
+
+                  // ─── Recent Banner Premium ───
                   Text(
                     'Mes dernières demandes',
                     style: AppTextStyles.titleMedium.copyWith(
@@ -174,13 +177,16 @@ class _PremiumActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.darkBorder.withOpacity(0.5), width: 1),
+        color: AppColors.darkCard.withOpacity(0.55),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.darkBorder.withOpacity(0.4),
+          width: 0.8,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -189,28 +195,28 @@ class _PremiumActionCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           splashColor: iconColor.withOpacity(0.1),
           highlightColor: iconColor.withOpacity(0.05),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.15),
+                    color: iconColor.withOpacity(0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, color: iconColor, size: 28),
+                  child: Icon(icon, color: iconColor, size: 26),
                 ),
                 const Spacer(),
                 Text(
                   label,
                   style: AppTextStyles.labelMedium.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     height: 1.3,
                   ),
                 ),
@@ -233,19 +239,22 @@ class _PremiumRecentBanner extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primary.withOpacity(0.15),
-            AppColors.darkCard,
+            AppColors.primary.withOpacity(0.1),
+            AppColors.darkCard.withOpacity(0.6),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(0.2),
+          width: 0.8,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
+            color: AppColors.primary.withOpacity(0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -253,19 +262,22 @@ class _PremiumRecentBanner extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(18),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
+                    color: AppColors.primary.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.history_rounded,
-                      color: AppColors.primaryLight, size: 28),
+                  child: const Icon(
+                    Iconsax.clock,
+                    color: AppColors.primaryLight,
+                    size: 26,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -289,8 +301,11 @@ class _PremiumRecentBanner extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios_rounded,
-                    size: 16, color: AppColors.grey400),
+                const Icon(
+                  Iconsax.arrow_right_3,
+                  size: 16,
+                  color: AppColors.grey400,
+                ),
               ],
             ),
           ),
