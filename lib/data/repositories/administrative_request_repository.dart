@@ -29,7 +29,11 @@ class AdministrativeRequestRepository {
 
   Future<List<AdministrativeRequestModel>> getAllRequests() async {
     final response = await _apiClient.getAdminRequests();
-    return (response.data as List)
+    final data = response.data;
+    final List list = (data is Map)
+        ? (data['data'] ?? data['requests'] ?? data['administrativeRequests'] ?? [])
+        : (data as List? ?? []);
+    return list
         .map((e) =>
             AdministrativeRequestModel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -37,7 +41,11 @@ class AdministrativeRequestRepository {
 
   Future<List<AdministrativeRequestModel>> getMyRequests() async {
     final response = await _apiClient.getMyAdminRequests();
-    return (response.data as List)
+    final data = response.data;
+    final List list = (data is Map)
+        ? (data['data'] ?? data['requests'] ?? data['administrativeRequests'] ?? [])
+        : (data as List? ?? []);
+    return list
         .map((e) =>
             AdministrativeRequestModel.fromJson(e as Map<String, dynamic>))
         .toList();

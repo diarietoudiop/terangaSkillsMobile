@@ -30,7 +30,11 @@ class MissingDocumentRepository {
 
   Future<List<MissingDocumentModel>> getAll() async {
     final response = await _apiClient.getMissingDocuments();
-    return (response.data as List)
+    final data = response.data;
+    final List list = (data is Map)
+        ? (data['data'] ?? data['missingDocuments'] ?? [])
+        : (data as List? ?? []);
+    return list
         .map((e) => MissingDocumentModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }

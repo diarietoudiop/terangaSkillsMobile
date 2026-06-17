@@ -28,14 +28,22 @@ class ComplaintRepository {
 
   Future<List<ComplaintModel>> getAllComplaints() async {
     final response = await _apiClient.getComplaints();
-    return (response.data as List)
+    final data = response.data;
+    final List list = (data is Map)
+        ? (data['data'] ?? data['complaints'] ?? [])
+        : (data as List? ?? []);
+    return list
         .map((e) => ComplaintModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   Future<List<ComplaintModel>> getMyComplaints() async {
     final response = await _apiClient.getMyComplaints();
-    return (response.data as List)
+    final data = response.data;
+    final List list = (data is Map)
+        ? (data['data'] ?? data['complaints'] ?? [])
+        : (data as List? ?? []);
+    return list
         .map((e) => ComplaintModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
