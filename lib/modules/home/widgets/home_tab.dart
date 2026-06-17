@@ -5,6 +5,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../routes/app_routes.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../controller/home_controller.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
