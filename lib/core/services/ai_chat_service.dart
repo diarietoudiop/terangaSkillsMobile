@@ -35,7 +35,7 @@ class AiChatService {
       return "Erreur : La clé API Gemini n'est pas configurée dans AppConstants.";
     }
 
-    final url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$key';
+    final url = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=$key';
 
     // Format history for Gemini API
     final contents = chatHistory.map((msg) {
