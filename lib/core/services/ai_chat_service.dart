@@ -83,12 +83,15 @@ class AiChatService {
       }
       return "Désolé, une erreur s'est produite lors de la génération de la réponse.";
     } on DioException catch (e) {
+      final serverMessage = e.response?.data?['error']?['message']?.toString();
+      final details = serverMessage != null ? "\nDétails : $serverMessage" : "";
+
       if (e.response?.statusCode == 400) {
-        return "Erreur : Requête invalide (vérifiez le format ou la clé API).";
+        return "Erreur : Requête invalide. Vérifiez le format ou la clé API.$details";
       } else if (e.response?.statusCode == 403) {
-        return "Erreur : Clé API Gemini invalide ou non autorisée.";
+        return "Erreur : Clé API Gemini invalide ou non autorisée.$details";
       }
-      return "Erreur de connexion avec l'IA : ${e.message}";
+      return "Erreur de connexion avec l'IA : ${e.message}$details";
     } catch (e) {
       return "Erreur inattendue : $e";
     }
