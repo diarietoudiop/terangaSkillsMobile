@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../core/theme/app_colors.dart';
@@ -72,7 +73,10 @@ class HomeTab extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(right: 24),
                   child: GestureDetector(
-                    onTap: homeController.openDrawer,
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      homeController.openDrawer();
+                    },
                     child: CircleAvatar(
                       radius: 20,
                       backgroundColor: AppColors.primary.withOpacity(0.15),

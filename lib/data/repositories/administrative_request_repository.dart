@@ -14,6 +14,7 @@ class AdministrativeRequestRepository {
     required String description,
     Map<String, dynamic>? data,
     List<MultipartFile>? files,
+    ProgressCallback? onSendProgress,
   }) async {
     final formData = FormData.fromMap({
       'type': type,
@@ -22,7 +23,7 @@ class AdministrativeRequestRepository {
       if (data != null) 'data': data.toString(),
       if (files != null) 'files': files,
     });
-    final response = await _apiClient.createAdminRequest(formData);
+    final response = await _apiClient.createAdminRequest(formData, onSendProgress: onSendProgress);
     return AdministrativeRequestModel.fromJson(
         response.data as Map<String, dynamic>);
   }

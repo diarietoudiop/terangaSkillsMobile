@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../core/services/connectivity_service.dart';
 import '../../../core/theme/app_colors.dart';
@@ -188,6 +189,36 @@ class ProfileDrawer extends StatelessWidget {
                       Get.toNamed(AppRoutes.qrScan);
                     },
                   ),
+                  const Divider(color: AppColors.darkBorder, height: 24, thickness: 0.8),
+                  Obx(() {
+                    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? true).obs;
+                    return ListTile(
+                      leading: Icon(
+                        isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
+                        color: AppColors.grey400,
+                        size: 22,
+                      ),
+                      title: Text(
+                        'Mode sombre',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      trailing: Switch.adaptive(
+                        value: isDarkMode.value,
+                        activeColor: AppColors.primary,
+                        onChanged: (val) {
+                          isDarkMode.value = val;
+                          GetStorage().write('is_dark_mode', val);
+                          Get.changeThemeMode(val ? ThemeMode.dark : ThemeMode.light);
+                        },
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),

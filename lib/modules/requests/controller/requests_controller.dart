@@ -15,6 +15,7 @@ class RequestsController extends GetxController {
   // ─── State ───────────────────────────────────────────
   final isLoading = false.obs;
   final isSubmitting = false.obs;
+  final uploadProgress = 0.0.obs;
   final requests = <AdministrativeRequestModel>[].obs;
   final selectedRequest = Rxn<AdministrativeRequestModel>();
 
@@ -71,6 +72,7 @@ class RequestsController extends GetxController {
     }
     try {
       isSubmitting.value = true;
+      uploadProgress.value = 0.0;
       final multiparts = await Future.wait(
         pickedFiles.map((f) async => MultipartFile.fromFile(
               f.path,
@@ -82,6 +84,11 @@ class RequestsController extends GetxController {
         title: titleController.value.text.trim(),
         description: descriptionController.value.text.trim(),
         files: multiparts.isEmpty ? null : multiparts,
+        onSendProgress: (sent, total) {
+          if (total > 0) {
+            uploadProgress.value = sent / total;
+          }
+        },
       );
       AppSnackbar.success('Demande soumise avec succès !');
       _clearForm();

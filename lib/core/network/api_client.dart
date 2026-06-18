@@ -41,8 +41,8 @@ class ApiClient {
   Future<Response> getMe() => _dio.get('/auth/me');
 
   // ─── ADMINISTRATIVE REQUESTS ───────────────────────────
-  Future<Response> createAdminRequest(FormData formData) =>
-      _dio.post('/administrative-requests', data: formData);
+  Future<Response> createAdminRequest(FormData formData, {ProgressCallback? onSendProgress}) =>
+      _dio.post('/administrative-requests', data: formData, onSendProgress: onSendProgress);
 
   Future<Response> getAdminRequests() =>
       _dio.get('/administrative-requests');
@@ -66,8 +66,8 @@ class ApiClient {
       _dio.delete('/administrative-requests/$id');
 
   // ─── COMPLAINTS ────────────────────────────────────────
-  Future<Response> createComplaint(FormData formData) =>
-      _dio.post('/complaints', data: formData);
+  Future<Response> createComplaint(FormData formData, {ProgressCallback? onSendProgress}) =>
+      _dio.post('/complaints', data: formData, onSendProgress: onSendProgress);
 
   Future<Response> getComplaints() => _dio.get('/complaints');
 
@@ -85,8 +85,8 @@ class ApiClient {
       _dio.delete('/complaints/$id');
 
   // ─── MISSING DOCUMENTS ─────────────────────────────────
-  Future<Response> createMissingDocument(FormData formData) =>
-      _dio.post('/missing-documents', data: formData);
+  Future<Response> createMissingDocument(FormData formData, {ProgressCallback? onSendProgress}) =>
+      _dio.post('/missing-documents', data: formData, onSendProgress: onSendProgress);
 
   Future<Response> getMissingDocuments() => _dio.get('/missing-documents');
 

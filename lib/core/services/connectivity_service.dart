@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../theme/app_colors.dart';
 
@@ -36,6 +37,7 @@ class ConnectivityService extends GetxService {
     if (hasNet != isConnected.value) {
       isConnected.value = hasNet;
       if (!hasNet) {
+        HapticFeedback.heavyImpact();
         _showNoInternetSnackbar();
       } else {
         _showBackOnlineSnackbar();

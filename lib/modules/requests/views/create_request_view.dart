@@ -140,6 +140,46 @@ class CreateRequestView extends GetView<RequestsController> {
                   ],
                 )),
             const SizedBox(height: 32),
+            Obx(() {
+              if (controller.isSubmitting.value) {
+                final pct = (controller.uploadProgress.value * 100).toInt();
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: LinearProgressIndicator(
+                          value: controller.uploadProgress.value,
+                          backgroundColor: AppColors.darkBorder,
+                          color: AppColors.primary,
+                          minHeight: 6,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Téléversement des fichiers...',
+                            style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey400),
+                          ),
+                          Text(
+                            '$pct%',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            }),
             Obx(() => SizedBox(
                   width: double.infinity,
                   height: 52,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/theme/app_colors.dart';
@@ -44,6 +45,7 @@ class QrScanView extends GetView<QrController> {
             onDetect: (capture) {
               final barcode = capture.barcodes.firstOrNull;
               if (barcode?.rawValue != null) {
+                HapticFeedback.mediumImpact();
                 controller.onQrDetected(barcode!.rawValue!);
                 scannerController.stop();
               }
