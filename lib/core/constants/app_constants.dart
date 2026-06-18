@@ -5,8 +5,8 @@ class AppConstants {
   static const String baseUrl = 'https://terangaskillsback.onrender.com/api/v1';
   static const String geminiApiKey = 'VOTRE_CLE_API_GEMINI_ICI';
   //static const String apiVersion = '/v1';
-  static const int connectTimeout = 30000;
-  static const int receiveTimeout = 30000;
+  static const int connectTimeout = 90000;
+  static const int receiveTimeout = 90000;
 
 
   static const String accessTokenKey = 'access_token';
