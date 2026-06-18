@@ -164,7 +164,7 @@ class LoginView extends GetView<AuthController> {
                     // ─── Divider ───
                     Row(
                       children: [
-                        const Expanded(child: Divider(color: AppColors.darkBorder)),
+                        Expanded(child: Divider(color: AppColors.darkBorder)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
@@ -175,7 +175,7 @@ class LoginView extends GetView<AuthController> {
                             ),
                           ),
                         ),
-                        const Expanded(child: Divider(color: AppColors.darkBorder)),
+                        Expanded(child: Divider(color: AppColors.darkBorder)),
                       ],
                     ),
                     const SizedBox(height: 28),

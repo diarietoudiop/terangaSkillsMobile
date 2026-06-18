@@ -89,7 +89,7 @@ class HomeView extends GetView<HomeController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.darkSurface.withOpacity(0.95),
-        border: const Border(
+        border: Border(
           top: BorderSide(
             color: AppColors.darkBorder,
             width: 0.8,

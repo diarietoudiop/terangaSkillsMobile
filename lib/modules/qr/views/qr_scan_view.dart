@@ -102,9 +102,9 @@ class _ResultSheet extends StatelessWidget {
       initialChildSize: 0.45,
       minChildSize: 0.3,
       builder: (_, scroll) => Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.darkSurface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: const EdgeInsets.all(24),
         child: Column(

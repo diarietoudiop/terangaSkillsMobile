@@ -31,7 +31,7 @@ class CreateRequestView extends GetView<RequestsController> {
                   decoration: BoxDecoration(
                     color: AppColors.darkCard,
                     borderRadius: BorderRadius.circular(12),
-                    border: const Border.fromBorderSide(
+                    border: Border.fromBorderSide(
                         BorderSide(color: AppColors.darkBorder)),
                   ),
                   child: DropdownButtonFormField<String>(
@@ -84,7 +84,7 @@ class CreateRequestView extends GetView<RequestsController> {
                             decoration: BoxDecoration(
                               color: AppColors.darkCard,
                               borderRadius: BorderRadius.circular(10),
-                              border: const Border.fromBorderSide(
+                              border: Border.fromBorderSide(
                                   BorderSide(color: AppColors.darkBorder)),
                             ),
                             child: Row(

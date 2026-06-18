@@ -95,7 +95,7 @@ class CreateComplaintView extends GetView<ComplaintsController> {
                     decoration: BoxDecoration(
                       color: AppColors.darkCard,
                       borderRadius: BorderRadius.circular(12),
-                      border: const Border.fromBorderSide(
+                      border: Border.fromBorderSide(
                           BorderSide(color: AppColors.darkBorder)),
                     ),
                     child: controller.pickedPhoto.value == null

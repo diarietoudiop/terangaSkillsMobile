@@ -27,7 +27,7 @@ class HomeTab extends StatelessWidget {
             backgroundColor: AppColors.darkSurface,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [AppColors.darkSurface, AppColors.darkBackground],
                     begin: Alignment.topCenter,
