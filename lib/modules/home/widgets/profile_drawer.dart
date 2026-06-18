@@ -17,9 +17,10 @@ class ProfileDrawer extends StatelessWidget {
     final auth = Get.find<AuthController>();
     final homeController = Get.find<HomeController>();
     final connService = Get.find<ConnectivityService>();
+    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? true).obs;
 
     return Drawer(
-      backgroundColor: AppColors.darkBackground,
+      backgroundColor: const Color(0xFF0F172A),
       child: SafeArea(
         child: Column(
           children: [
@@ -36,7 +37,7 @@ class ProfileDrawer extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
                 decoration: const BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.darkBorder, width: 0.8),
+                    bottom: BorderSide(color: Color(0xFF334155), width: 0.8),
                   ),
                 ),
                 child: Column(
@@ -86,9 +87,9 @@ class ProfileDrawer extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: AppColors.darkSurface.withOpacity(0.5),
+                        color: const Color(0xFF1E293B).withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.darkBorder.withOpacity(0.5)),
+                        border: Border.all(color: const Color(0xFF334155).withOpacity(0.5)),
                       ),
                       child: Row(
                         children: [
@@ -180,7 +181,7 @@ class ProfileDrawer extends StatelessWidget {
                       homeController.changeTab(3);
                     },
                   ),
-                  const Divider(color: AppColors.darkBorder, height: 24, thickness: 0.8),
+                  const Divider(color: Color(0xFF334155), height: 24, thickness: 0.8),
                   _DrawerItem(
                     icon: Iconsax.scan,
                     label: 'Scanner QR Code',
@@ -189,36 +190,33 @@ class ProfileDrawer extends StatelessWidget {
                       Get.toNamed(AppRoutes.qrScan);
                     },
                   ),
-                  const Divider(color: AppColors.darkBorder, height: 24, thickness: 0.8),
-                  Obx(() {
-                    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? true).obs;
-                    return ListTile(
-                      leading: Icon(
-                        isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
-                        color: AppColors.grey400,
-                        size: 22,
+                  const Divider(color: Color(0xFF334155), height: 24, thickness: 0.8),
+                  Obx(() => ListTile(
+                    leading: Icon(
+                      isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
+                      color: AppColors.grey400,
+                      size: 22,
+                    ),
+                    title: Text(
+                      'Mode sombre',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
                       ),
-                      title: Text(
-                        'Mode sombre',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      trailing: Switch.adaptive(
-                        value: isDarkMode.value,
-                        activeColor: AppColors.primary,
-                        onChanged: (val) {
-                          isDarkMode.value = val;
-                          GetStorage().write('is_dark_mode', val);
-                          Get.changeThemeMode(val ? ThemeMode.dark : ThemeMode.light);
-                        },
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    );
-                  }),
+                    ),
+                    trailing: Switch.adaptive(
+                      value: isDarkMode.value,
+                      activeColor: AppColors.primary,
+                      onChanged: (val) {
+                        isDarkMode.value = val;
+                        GetStorage().write('is_dark_mode', val);
+                        Get.changeThemeMode(val ? ThemeMode.dark : ThemeMode.light);
+                      },
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  )),
                 ],
               ),
             ),
@@ -228,7 +226,7 @@ class ProfileDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: AppColors.darkBorder, width: 0.8),
+                  top: BorderSide(color: Color(0xFF334155), width: 0.8),
                 ),
               ),
               child: SizedBox(

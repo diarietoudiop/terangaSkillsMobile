@@ -15,22 +15,25 @@ import '../widgets/profile_drawer.dart';
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
-  static const List<Widget> _pages = [
-    HomeTab(),
-    RequestsListView(),
-    ComplaintsListView(),
-    MissingDocsListView(),
-    DashboardView(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Force dependency on Theme to trigger rebuild on theme mode change
+    Theme.of(context);
+
+    final pages = [
+      HomeTab(),
+      RequestsListView(),
+      ComplaintsListView(),
+      MissingDocsListView(),
+      DashboardView(),
+    ];
+
     return Obx(() => Scaffold(
           key: controller.scaffoldKey,
           drawer: const ProfileDrawer(),
           body: IndexedStack(
             index: controller.currentIndex.value,
-            children: _pages,
+            children: pages,
           ),
           floatingActionButton: _buildFab(),
           floatingActionButtonLocation:

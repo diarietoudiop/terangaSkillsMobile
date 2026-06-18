@@ -46,7 +46,7 @@ class HomeTab extends StatelessWidget {
                           return Text(
                             'Bonjour, ${name.isNotEmpty ? name : 'Citoyen'} 👋',
                             style: AppTextStyles.headlineSmall.copyWith(
-                              color: Colors.white,
+                              color: AppColors.text,
                               fontWeight: FontWeight.bold,
                               letterSpacing: -0.5,
                             ),
@@ -105,7 +105,7 @@ class HomeTab extends StatelessWidget {
                   Text(
                     'Services rapides',
                     style: AppTextStyles.titleMedium.copyWith(
-                      color: Colors.white,
+                      color: AppColors.text,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -150,7 +150,7 @@ class HomeTab extends StatelessWidget {
                   Text(
                     'Mes dernières demandes',
                     style: AppTextStyles.titleMedium.copyWith(
-                      color: Colors.white,
+                      color: AppColors.text,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -224,7 +224,7 @@ class _PremiumActionCard extends StatelessWidget {
                 Text(
                   label,
                   style: AppTextStyles.labelMedium.copyWith(
-                    color: Colors.white,
+                    color: AppColors.text,
                     fontWeight: FontWeight.w600,
                     height: 1.3,
                   ),
@@ -296,7 +296,7 @@ class _PremiumRecentBanner extends StatelessWidget {
                       Text(
                         'Voir mes demandes',
                         style: AppTextStyles.titleSmall.copyWith(
-                          color: Colors.white,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -304,7 +304,7 @@ class _PremiumRecentBanner extends StatelessWidget {
                       Text(
                         'Suivez l\'état de vos dossiers en temps réel',
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.grey400,
+                          color: Get.isDarkMode ? AppColors.grey400 : AppColors.grey600,
                         ),
                       ),
                     ],
