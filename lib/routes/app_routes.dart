@@ -26,4 +26,7 @@ class AppRoutes {
 
   // Dashboard
   static const String dashboard = '/dashboard';
+
+  // AI Assistant
+  static const String aiAssistant = '/ai-assistant';
 }
