@@ -49,8 +49,13 @@ class TerangaSkillsApp extends StatelessWidget {
         ? AppRoutes.home
         : AppRoutes.login;
 
-    final isDark = storage.read<bool>('is_dark_mode') ?? true;
-    final initialThemeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    final isDark = storage.read<bool>('is_dark_mode');
+    final ThemeMode initialThemeMode;
+    if (isDark == null) {
+      initialThemeMode = ThemeMode.system;
+    } else {
+      initialThemeMode = isDark ? ThemeMode.dark : ThemeMode.light;
+    }
 
     return GetMaterialApp(
       title: 'TerangaSkills',

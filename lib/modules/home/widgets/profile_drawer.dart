@@ -17,7 +17,7 @@ class ProfileDrawer extends StatelessWidget {
     final auth = Get.find<AuthController>();
     final homeController = Get.find<HomeController>();
     final connService = Get.find<ConnectivityService>();
-    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? true).obs;
+    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? Get.isPlatformDarkMode).obs;
 
     return Drawer(
       backgroundColor: AppColors.darkBackground,
