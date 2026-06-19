@@ -5,9 +5,11 @@ import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routes/app_routes.dart';
+import '../../../routes/agent_routes.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _repo;
@@ -82,7 +84,11 @@ class AuthController extends GetxController {
       }
 
       _saveSession(result.accessToken, result.user);
-      Get.offAllNamed(AppRoutes.home);
+      if (role == 'AGENT') {
+        Get.offAllNamed(AgentRoutes.agentHome);
+      } else {
+        Get.offAllNamed(AppRoutes.home);
+      }
     } on DioException catch (e) {
       AppSnackbar.error(_extractErrorMessage(e));
     } catch (e) {
@@ -153,14 +159,15 @@ class AuthController extends GetxController {
 
   String _extractErrorMessage(DioException e) {
     if (e.error is Exception) {
-      return e.error
+      final msg = e.error
           .toString()
           .replaceAll('AppException(', '')
           .split(':')
           .last
           .trim()
           .replaceAll(')', '');
+      return ErrorTranslator.translate(msg);
     }
-    return e.message ?? 'Une erreur est survenue.';
+    return ErrorTranslator.translate(e.message ?? 'Une erreur est survenue.');
   }
 }

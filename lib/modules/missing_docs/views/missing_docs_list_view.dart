@@ -8,6 +8,7 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/status_utils.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/missing_docs_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class MissingDocsListView extends GetView<MissingDocsController> {
   const MissingDocsListView({super.key});
@@ -16,6 +17,14 @@ class MissingDocsListView extends GetView<MissingDocsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
         title: Text('Documents Perdus', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(

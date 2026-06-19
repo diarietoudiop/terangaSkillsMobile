@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide MultipartFile;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/missing_document_model.dart';
 import '../../../data/repositories/missing_document_repository.dart';
 
@@ -128,6 +129,10 @@ class MissingDocsController extends GetxController {
     currentPosition.value = null;
   }
 
-  String _msg(DioException e) =>
-      e.error?.toString().split(':').last.trim() ?? 'Erreur réseau';
+  String _msg(DioException e) {
+    final rawMsg = e.response?.data?['message']?.toString() ??
+        e.error?.toString().split(':').last.trim() ??
+        'Erreur réseau';
+    return ErrorTranslator.translate(rawMsg);
+  }
 }

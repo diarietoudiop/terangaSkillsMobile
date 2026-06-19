@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import '../modules/onboarding/bindings/onboarding_binding.dart';
+import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
@@ -24,12 +26,22 @@ import '../modules/ai_assistant/bindings/ai_chat_binding.dart';
 import '../modules/ai_assistant/views/ai_chat_view.dart';
 import '../modules/investment_projects/bindings/investment_projects_binding.dart';
 import '../modules/investment_projects/views/investment_projects_list_view.dart';
+import '../modules/agent/bindings/agent_binding.dart';
+import '../modules/agent/views/agent_home_view.dart';
+import '../modules/agent/views/agent_requests_list_view.dart';
+import '../modules/agent/views/agent_request_detail_view.dart';
 import 'app_routes.dart';
+import 'agent_routes.dart';
 
 class AppPages {
   AppPages._();
 
   static final List<GetPage> pages = [
+    GetPage(
+      name: AppRoutes.onboarding,
+      page: () => const OnboardingView(),
+      binding: OnboardingBinding(),
+    ),
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginView(),
@@ -122,6 +134,25 @@ class AppPages {
       name: AppRoutes.investmentProjectsList,
       page: () => const InvestmentProjectsListView(),
       binding: InvestmentProjectsBinding(),
+    ),
+    // ─── AGENT ROUTES ───
+    GetPage(
+      name: AgentRoutes.agentHome,
+      page: () => const AgentHomeView(),
+      bindings: [
+        AgentBinding(),
+        DashboardBinding(),
+      ],
+    ),
+    GetPage(
+      name: AgentRoutes.agentRequestsList,
+      page: () => const AgentRequestsListView(),
+      binding: AgentBinding(),
+    ),
+    GetPage(
+      name: AgentRoutes.agentRequestDetail,
+      page: () => const AgentRequestDetailView(),
+      binding: AgentBinding(),
     ),
   ];
 }

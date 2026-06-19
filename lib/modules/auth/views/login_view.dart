@@ -14,6 +14,7 @@ class LoginView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       body: Stack(
         children: [
           Positioned(
@@ -65,10 +66,10 @@ class LoginView extends GetView<AuthController> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: AppColors.darkCard.withOpacity(0.65),
+                        color: AppColors.lightCard.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: AppColors.darkBorder.withOpacity(0.4),
+                          color: AppColors.lightBorder.withOpacity(0.8),
                           width: 1,
                         ),
                         boxShadow: [
@@ -87,13 +88,14 @@ class LoginView extends GetView<AuthController> {
                             style: AppTextStyles.headlineSmall.copyWith(
                               fontWeight: FontWeight.bold,
                               letterSpacing: -0.5,
+                              color: AppColors.grey900,
                             ),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             'Connectez-vous à votre espace citoyen',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.grey400,
+                              color: AppColors.grey600,
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -171,7 +173,7 @@ class LoginView extends GetView<AuthController> {
                     // ─── Divider ───
                     Row(
                       children: [
-                        Expanded(child: Divider(color: AppColors.darkBorder)),
+                        const Expanded(child: Divider(color: AppColors.lightBorder)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
@@ -182,7 +184,7 @@ class LoginView extends GetView<AuthController> {
                             ),
                           ),
                         ),
-                        Expanded(child: Divider(color: AppColors.darkBorder)),
+                        const Expanded(child: Divider(color: AppColors.lightBorder)),
                       ],
                     ),
                     const SizedBox(height: 28),

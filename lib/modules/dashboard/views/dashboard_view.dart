@@ -6,6 +6,8 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../controller/dashboard_controller.dart';
+import '../../agent/controllers/agent_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -14,6 +16,16 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<AgentController>()) {
+              Get.find<AgentController>().openDrawer();
+            } else if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
         title: Text('Tableau de bord', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
@@ -51,7 +63,7 @@ class DashboardView extends GetView<DashboardController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ─── KPI Row ───
-              Text('KPIs Globaux', style: AppTextStyles.titleMedium),
+              // Text('KPIs Globaux', style: AppTextStyles.titleMedium),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -257,26 +269,35 @@ class _RequestsChart extends StatelessWidget {
               PieChartData(
                 sectionsSpace: 3,
                 centerSpaceRadius: 40,
-                sections: [
-                  PieChartSectionData(
-                    value: pending,
-                    color: AppColors.statusPending,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                  PieChartSectionData(
-                    value: inProgress,
-                    color: AppColors.statusInReview,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                  PieChartSectionData(
-                    value: completed,
-                    color: AppColors.statusCompleted,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                ],
+                sections: (pending == 0 && inProgress == 0 && completed == 0)
+                    ? [
+                        PieChartSectionData(
+                          value: 1,
+                          color: AppColors.darkBorder,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                      ]
+                    : [
+                        PieChartSectionData(
+                          value: pending,
+                          color: AppColors.statusPending,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: inProgress,
+                          color: AppColors.statusInReview,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: completed,
+                          color: AppColors.statusCompleted,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                      ],
               ),
             ),
           ),

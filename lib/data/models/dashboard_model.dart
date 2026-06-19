@@ -16,7 +16,9 @@ class DashboardStatsModel {
         ? json['data'] as Map<String, dynamic>
         : json;
     return DashboardStatsModel(
-      users: UsersStats.fromJson((map['users'] ?? {}) as Map<String, dynamic>),
+      users: UsersStats.fromJson(
+        (map['citizens'] ?? map['users'] ?? {}) as Map<String, dynamic>,
+      ),
       administrativeRequests: AdminRequestsStats.fromJson(
         (map['administrativeRequests'] ?? {}) as Map<String, dynamic>,
       ),

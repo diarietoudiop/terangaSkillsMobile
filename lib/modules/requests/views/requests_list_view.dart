@@ -7,7 +7,7 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/status_utils.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/requests_controller.dart';
-import '../../auth/controller/auth_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class RequestsListView extends GetView<RequestsController> {
   const RequestsListView({super.key});
@@ -18,7 +18,15 @@ class RequestsListView extends GetView<RequestsController> {
     final isAgent = auth.currentUser.value?.isAgent ?? false;
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAgent ? 'Demandes Citoyennes' : 'Mes Demandes', style: AppTextStyles.titleLarge),
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
+        title: Text('Mes Demandes', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
             icon: const Icon(Iconsax.refresh),

@@ -8,6 +8,8 @@ import 'core/theme/app_theme.dart';
 import 'modules/auth/controller/auth_controller.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
+import 'routes/agent_routes.dart';
+import 'dart:convert';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +47,22 @@ class TerangaSkillsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final storage = GetStorage();
     final token = storage.read<String>(AppConstants.accessTokenKey);
-    final initialRoute = (token != null && token.isNotEmpty)
-        ? AppRoutes.home
-        : AppRoutes.login;
+    final userStr = storage.read<String>(AppConstants.userKey);
+    final isFirstLaunch = storage.read<bool>('isFirstLaunch') ?? true;
+    
+    String initialRoute = isFirstLaunch ? AppRoutes.onboarding : AppRoutes.login;
+    if (token != null && token.isNotEmpty && userStr != null) {
+      try {
+        final user = jsonDecode(userStr);
+        if (user['role'] == 'AGENT') {
+          initialRoute = AgentRoutes.agentHome;
+        } else {
+          initialRoute = AppRoutes.home;
+        }
+      } catch (_) {
+        initialRoute = AppRoutes.home;
+      }
+    }
 
     final isDark = storage.read<bool>('is_dark_mode');
     final ThemeMode initialThemeMode;

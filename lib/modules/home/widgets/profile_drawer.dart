@@ -6,6 +6,7 @@ import '../../../core/services/connectivity_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../routes/app_routes.dart';
+import '../../../routes/agent_routes.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../controller/home_controller.dart';
 
@@ -15,7 +16,7 @@ class ProfileDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
-    final homeController = Get.find<HomeController>();
+    final homeController = Get.isRegistered<HomeController>() ? Get.find<HomeController>() : null;
     final connService = Get.find<ConnectivityService>();
     final isDarkMode =
         (GetStorage().read<bool>('is_dark_mode') ?? Get.isPlatformDarkMode).obs;
@@ -203,72 +204,83 @@ class ProfileDrawer extends StatelessWidget {
 
             // ─── Menu Navigation Options ───────────────────
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 16,
-                  horizontal: 16,
-                ),
-                children: [
-                  _DrawerItem(
-                    icon: Iconsax.home,
-                    label: 'Accueil',
-                    onTap: () {
-                      Get.back(); // close drawer
-                      homeController.changeTab(0);
-                    },
+              child: Obx(() {
+                final user = auth.currentUser.value;
+                return ListView(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
                   ),
-                  _DrawerItem(
-                    icon: Iconsax.document,
-                    label: 'Mes Demandes',
-                    onTap: () {
-                      Get.back();
-                      homeController.changeTab(1);
-                    },
-                  ),
-                  _DrawerItem(
-                    icon: Iconsax.danger,
-                    label: 'Mes Réclamations',
-                    onTap: () {
-                      Get.back();
-                      homeController.changeTab(2);
-                    },
-                  ),
-                  _DrawerItem(
-                    icon: Iconsax.search_normal_1,
-                    label: 'Mes Documents',
-                    onTap: () {
-                      Get.back();
-                      homeController.changeTab(3);
-                    },
-                  ),
-                  _DrawerItem(
-                    icon: Iconsax.building,
-                    label: 'Projets d\'Investissement',
-                    onTap: () {
-                      Get.back();
-                      Get.toNamed(AppRoutes.investmentProjectsList);
-                    },
-                  ),
-                  Divider(
-                    color: AppColors.darkBorder,
-                    height: 24,
-                    thickness: 0.8,
-                  ),
-                  _DrawerItem(
-                    icon: Iconsax.scan,
-                    label: 'Scanner QR Code',
-                    onTap: () {
-                      Get.back();
-                      Get.toNamed(AppRoutes.qrScan);
-                    },
-                  ),
-                  if (auth.currentUser.value?.isAgent == false) ...[
+                  children: [
+                    if (user?.role != 'AGENT') ...[
+                      _DrawerItem(
+                        icon: Iconsax.home,
+                        label: 'Accueil',
+                        onTap: () {
+                          Get.back(); // close drawer
+                          if (homeController != null) homeController.changeTab(0);
+                        },
+                      ),
+                      _DrawerItem(
+                        icon: Iconsax.document,
+                        label: 'Mes Demandes',
+                        onTap: () {
+                          Get.back();
+                          if (homeController != null) homeController.changeTab(1);
+                        },
+                      ),
+                      _DrawerItem(
+                        icon: Iconsax.danger,
+                        label: 'Mes Réclamations',
+                        onTap: () {
+                          Get.back();
+                          if (homeController != null) homeController.changeTab(2);
+                        },
+                      ),
+                      _DrawerItem(
+                        icon: Iconsax.search_normal_1,
+                        label: 'Mes Documents',
+                        onTap: () {
+                          Get.back();
+                          if (homeController != null) homeController.changeTab(3);
+                        },
+                      ),
+                      _DrawerItem(
+                        icon: Iconsax.building,
+                        label: 'Projets d\'Investissement',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed(AppRoutes.investmentProjectsList);
+                        },
+                      ),
+                      Divider(
+                        color: AppColors.darkBorder,
+                        height: 24,
+                        thickness: 0.8,
+                      ),
+                    ],
+                    if (user?.role == 'AGENT') ...[
+                      _DrawerItem(
+                        icon: Iconsax.task_square,
+                        label: 'Demandes à traiter',
+                        onTap: () {
+                          Get.back();
+                          Get.offAllNamed(AgentRoutes.agentHome);
+                        },
+                      ),
+                      Divider(
+                        color: AppColors.darkBorder,
+                        height: 24,
+                        thickness: 0.8,
+                      ),
+                    ],
+
                     _DrawerItem(
-                      icon: Iconsax.messages_1,
-                      label: 'Assistant IA Wolof',
+                      icon: Iconsax.scan,
+                      label: 'Scanner QR Code',
                       onTap: () {
                         Get.back();
-                        Get.toNamed(AppRoutes.aiAssistant);
+                        Get.toNamed(AppRoutes.qrScan);
                       },
                     ),
                     Divider(
@@ -276,39 +288,39 @@ class ProfileDrawer extends StatelessWidget {
                       height: 24,
                       thickness: 0.8,
                     ),
-                  ],
-                  Obx(
-                    () => ListTile(
-                      leading: Icon(
-                        isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
-                        color: AppColors.grey400,
-                        size: 22,
-                      ),
-                      title: Text(
-                        'Mode sombre',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.text,
-                          fontWeight: FontWeight.w500,
+                    Obx(
+                      () => ListTile(
+                        leading: Icon(
+                          isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
+                          color: AppColors.grey400,
+                          size: 22,
+                        ),
+                        title: Text(
+                          'Mode sombre',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.text,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        trailing: Switch.adaptive(
+                          value: isDarkMode.value,
+                          activeColor: AppColors.primary,
+                          onChanged: (val) {
+                            isDarkMode.value = val;
+                            GetStorage().write('is_dark_mode', val);
+                            Get.changeThemeMode(
+                              val ? ThemeMode.dark : ThemeMode.light,
+                            );
+                          },
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      trailing: Switch.adaptive(
-                        value: isDarkMode.value,
-                        activeColor: AppColors.primary,
-                        onChanged: (val) {
-                          isDarkMode.value = val;
-                          GetStorage().write('is_dark_mode', val);
-                          Get.changeThemeMode(
-                            val ? ThemeMode.dark : ThemeMode.light,
-                          );
-                        },
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              }),
             ),
 
             // ─── Footer: Log Out ───────────────────────────

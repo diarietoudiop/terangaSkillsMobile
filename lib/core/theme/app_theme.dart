@@ -14,15 +14,15 @@ class AppTheme {
         primary: AppColors.primary,
         primaryContainer: AppColors.primaryDark,
         secondary: AppColors.secondary,
-        surface: Color(0xFF1E293B),
+        surface: Color(0xFF121212),
         error: AppColors.error,
         onPrimary: Colors.white,
         onSurface: Colors.white,
       ),
-      scaffoldBackgroundColor: const Color(0xFF0F172A),
+      scaffoldBackgroundColor: const Color(0xFF000000),
       textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF0F172A),
+        backgroundColor: Color(0xFF000000),
         elevation: 0,
         scrolledUnderElevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -35,11 +35,11 @@ class AppTheme {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       cardTheme: CardThemeData(
-        color: const Color(0xFF243044),
+        color: const Color(0xFF1C1C1C),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Color(0xFF334155), width: 1),
+          side: const BorderSide(color: Color(0xFF2A2A2A), width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -82,16 +82,16 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF243044),
+        fillColor: const Color(0xFF1C1C1C),
         hintStyle: GoogleFonts.inter(color: AppColors.grey500, fontSize: 14),
         labelStyle: GoogleFonts.inter(color: AppColors.grey400, fontSize: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF334155)),
+          borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF334155)),
+          borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -107,18 +107,18 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFF243044),
+        backgroundColor: const Color(0xFF1C1C1C),
         selectedColor: AppColors.primary.withOpacity(0.2),
         labelStyle: GoogleFonts.inter(
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
-        side: const BorderSide(color: Color(0xFF334155)),
+        side: const BorderSide(color: Color(0xFF2A2A2A)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Color(0xFF1E293B),
+        backgroundColor: Color(0xFF121212),
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.grey500,
         elevation: 0,
@@ -131,11 +131,11 @@ class AppTheme {
         shape: CircleBorder(),
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFF334155),
+        color: Color(0xFF2A2A2A),
         thickness: 1,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: const Color(0xFF243044),
+        backgroundColor: const Color(0xFF1C1C1C),
         contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         behavior: SnackBarBehavior.floating,
