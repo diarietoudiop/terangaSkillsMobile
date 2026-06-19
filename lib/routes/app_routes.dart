@@ -29,4 +29,7 @@ class AppRoutes {
 
   // AI Assistant
   static const String aiAssistant = '/ai-assistant';
+
+  // Investment Projects
+  static const String investmentProjectsList = '/investment-projects';
 }

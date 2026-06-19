@@ -54,24 +54,24 @@ class ComplaintModel {
           : DateTime.now(),
       history: map['history'] != null
           ? (map['history'] as List)
-              .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'photoUrl': photoUrl,
-        'latitude': latitude,
-        'longitude': longitude,
-        'status': status,
-        'citizenId': citizenId,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'id': id,
+    'title': title,
+    'description': description,
+    'photoUrl': photoUrl,
+    'latitude': latitude,
+    'longitude': longitude,
+    'status': status,
+    'citizenId': citizenId,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 
   bool get hasLocation => latitude != null && longitude != null;
 }

@@ -5,7 +5,7 @@ class DashboardRepository {
   final ApiClient _apiClient;
 
   DashboardRepository({ApiClient? apiClient})
-      : _apiClient = apiClient ?? ApiClient();
+    : _apiClient = apiClient ?? ApiClient();
 
   Future<DashboardStatsModel> getStats() async {
     final response = await _apiClient.getDashboardStats();

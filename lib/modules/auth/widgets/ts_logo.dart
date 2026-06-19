@@ -33,7 +33,7 @@ class TsLogo extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'TerangaSkills',
+          'CIVILINK',
           style: AppTextStyles.titleLarge.copyWith(
             fontWeight: FontWeight.w800,
             foreground: Paint()

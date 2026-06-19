@@ -63,12 +63,17 @@ class MissingDocsListView extends GetView<MissingDocsController> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Text('Aucun document signalé', style: AppTextStyles.titleMedium),
+                  Text(
+                    'Aucun document signalé',
+                    style: AppTextStyles.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Consultez ou signalez des documents d\'identité perdus ou retrouvés.',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey500),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.grey500,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
@@ -118,8 +123,10 @@ class MissingDocsListView extends GetView<MissingDocsController> {
                   child: InkWell(
                     onTap: () {
                       controller.selectedDoc.value = doc;
-                      Get.toNamed(AppRoutes.missingDocDetail,
-                          arguments: {'id': doc.id});
+                      Get.toNamed(
+                        AppRoutes.missingDocDetail,
+                        arguments: {'id': doc.id},
+                      );
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Padding(
@@ -169,8 +176,10 @@ class MissingDocsListView extends GetView<MissingDocsController> {
                                       Expanded(
                                         child: Text(
                                           doc.lastSeenLocation!,
-                                          style: AppTextStyles.bodySmall.copyWith(
-                                              color: AppColors.grey500),
+                                          style: AppTextStyles.bodySmall
+                                              .copyWith(
+                                                color: AppColors.grey500,
+                                              ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -182,18 +191,21 @@ class MissingDocsListView extends GetView<MissingDocsController> {
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 3),
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: statusColor.withOpacity(0.12),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
                                         statusLabel,
-                                        style: AppTextStyles.labelSmall.copyWith(
-                                          color: statusColor,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                        style: AppTextStyles.labelSmall
+                                            .copyWith(
+                                              color: statusColor,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
                                     ),
                                     const Spacer(),
