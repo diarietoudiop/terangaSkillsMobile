@@ -44,7 +44,10 @@ class TerangaSkillsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storage = GetStorage();
-    const initialRoute = AppRoutes.splash;
+    final token = storage.read<String>(AppConstants.accessTokenKey);
+    final initialRoute = (token != null && token.isNotEmpty)
+        ? AppRoutes.home
+        : AppRoutes.splash;
 
     final isDark = storage.read<bool>('is_dark_mode');
     final ThemeMode initialThemeMode;
