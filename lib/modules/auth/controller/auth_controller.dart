@@ -137,6 +137,8 @@ class AuthController extends GetxController {
   void _saveSession(String token, Map<String, dynamic> userData) {
     _storage.write(AppConstants.accessTokenKey, token);
     _storage.write(AppConstants.userKey, jsonEncode(userData));
+    _storage.write('is_dark_mode', false);
+    Get.changeThemeMode(ThemeMode.light);
     try {
       currentUser.value = UserModel.fromJson(userData);
     } catch (_) {}

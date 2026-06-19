@@ -22,12 +22,19 @@ import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/ai_assistant/bindings/ai_chat_binding.dart';
 import '../modules/ai_assistant/views/ai_chat_view.dart';
+import '../modules/splash/bindings/splash_binding.dart';
+import '../modules/splash/views/splash_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
   AppPages._();
 
   static final List<GetPage> pages = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginView(),
