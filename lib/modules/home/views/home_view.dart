@@ -8,6 +8,7 @@ import '../../requests/views/requests_list_view.dart';
 import '../../complaints/views/complaints_list_view.dart';
 import '../../missing_docs/views/missing_docs_list_view.dart';
 import '../../dashboard/views/dashboard_view.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../controller/home_controller.dart';
 import '../widgets/home_tab.dart';
 import '../widgets/profile_drawer.dart';
@@ -37,13 +38,17 @@ class HomeView extends GetView<HomeController> {
           children: pages,
         ),
         floatingActionButton: _buildFab(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: (Get.find<AuthController>().currentUser.value?.isAgent ?? false)
+            ? null
+            : FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: _buildBottomNav(),
       ),
     );
   }
 
   Widget _buildFab() {
+    final isAgent = Get.find<AuthController>().currentUser.value?.isAgent ?? false;
+    if (isAgent) return const SizedBox.shrink();
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -87,6 +92,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildBottomNav() {
+    final isAgent = Get.find<AuthController>().currentUser.value?.isAgent ?? false;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.darkSurface.withOpacity(0.95),
@@ -98,7 +104,7 @@ class HomeView extends GetView<HomeController> {
         color: Colors.transparent,
         elevation: 0,
         notchMargin: 8,
-        shape: const CircularNotchedRectangle(),
+        shape: isAgent ? null : const CircularNotchedRectangle(),
         child: SizedBox(
           height: 60,
           child: Obx(
@@ -116,16 +122,16 @@ class HomeView extends GetView<HomeController> {
                 _NavItem(
                   icon: Iconsax.document,
                   selectedIcon: Iconsax.document5,
-                  label: 'Demandes',
+                  label: isAgent ? 'Demandes' : 'Mes Demandes',
                   index: 1,
                   current: controller.currentIndex.value,
                   onTap: () => controller.changeTab(1),
                 ),
-                const SizedBox(width: 48), // FAB space
+                if (!isAgent) const SizedBox(width: 48), // FAB space
                 _NavItem(
                   icon: Iconsax.danger,
                   selectedIcon: Iconsax.danger5,
-                  label: 'Réclamations',
+                  label: isAgent ? 'Réclamations' : 'Mes Réclamations',
                   index: 2,
                   current: controller.currentIndex.value,
                   onTap: () => controller.changeTab(2),
@@ -133,7 +139,7 @@ class HomeView extends GetView<HomeController> {
                 _NavItem(
                   icon: Iconsax.search_normal_1,
                   selectedIcon: Iconsax.search_status5,
-                  label: 'Documents',
+                  label: isAgent ? 'Documents' : 'Mes Documents',
                   index: 3,
                   current: controller.currentIndex.value,
                   onTap: () => controller.changeTab(3),
