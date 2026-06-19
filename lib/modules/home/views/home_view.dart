@@ -28,18 +28,19 @@ class HomeView extends GetView<HomeController> {
       DashboardView(),
     ];
 
-    return Obx(() => Scaffold(
-          key: controller.scaffoldKey,
-          drawer: const ProfileDrawer(),
-          body: IndexedStack(
-            index: controller.currentIndex.value,
-            children: pages,
-          ),
-          floatingActionButton: _buildFab(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: _buildBottomNav(),
-        ));
+    return Obx(
+      () => Scaffold(
+        key: controller.scaffoldKey,
+        drawer: const ProfileDrawer(),
+        body: IndexedStack(
+          index: controller.currentIndex.value,
+          children: pages,
+        ),
+        floatingActionButton: _buildFab(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: _buildBottomNav(),
+      ),
+    );
   }
 
   Widget _buildFab() {
@@ -90,10 +91,7 @@ class HomeView extends GetView<HomeController> {
       decoration: BoxDecoration(
         color: AppColors.darkSurface.withOpacity(0.95),
         border: Border(
-          top: BorderSide(
-            color: AppColors.darkBorder,
-            width: 0.8,
-          ),
+          top: BorderSide(color: AppColors.darkBorder, width: 0.8),
         ),
       ),
       child: BottomAppBar(
@@ -103,40 +101,46 @@ class HomeView extends GetView<HomeController> {
         shape: const CircularNotchedRectangle(),
         child: SizedBox(
           height: 60,
-          child: Obx(() => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _NavItem(
-                      icon: Iconsax.home,
-                      selectedIcon: Iconsax.home5,
-                      label: 'Accueil',
-                      index: 0,
-                      current: controller.currentIndex.value,
-                      onTap: () => controller.changeTab(0)),
-                  _NavItem(
-                      icon: Iconsax.document,
-                      selectedIcon: Iconsax.document5,
-                      label: 'Demandes',
-                      index: 1,
-                      current: controller.currentIndex.value,
-                      onTap: () => controller.changeTab(1)),
-                  const SizedBox(width: 48), // FAB space
-                  _NavItem(
-                      icon: Iconsax.danger,
-                      selectedIcon: Iconsax.danger5,
-                      label: 'Réclamations',
-                      index: 2,
-                      current: controller.currentIndex.value,
-                      onTap: () => controller.changeTab(2)),
-                  _NavItem(
-                      icon: Iconsax.search_normal_1,
-                      selectedIcon: Iconsax.search_status5,
-                      label: 'Documents',
-                      index: 3,
-                      current: controller.currentIndex.value,
-                      onTap: () => controller.changeTab(3)),
-                ],
-              )),
+          child: Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _NavItem(
+                  icon: Iconsax.home,
+                  selectedIcon: Iconsax.home5,
+                  label: 'Accueil',
+                  index: 0,
+                  current: controller.currentIndex.value,
+                  onTap: () => controller.changeTab(0),
+                ),
+                _NavItem(
+                  icon: Iconsax.document,
+                  selectedIcon: Iconsax.document5,
+                  label: 'Demandes',
+                  index: 1,
+                  current: controller.currentIndex.value,
+                  onTap: () => controller.changeTab(1),
+                ),
+                const SizedBox(width: 48), // FAB space
+                _NavItem(
+                  icon: Iconsax.danger,
+                  selectedIcon: Iconsax.danger5,
+                  label: 'Réclamations',
+                  index: 2,
+                  current: controller.currentIndex.value,
+                  onTap: () => controller.changeTab(2),
+                ),
+                _NavItem(
+                  icon: Iconsax.search_normal_1,
+                  selectedIcon: Iconsax.search_status5,
+                  label: 'Documents',
+                  index: 3,
+                  current: controller.currentIndex.value,
+                  onTap: () => controller.changeTab(3),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

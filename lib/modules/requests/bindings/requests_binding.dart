@@ -6,9 +6,11 @@ class RequestsBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<AdministrativeRequestRepository>(
-        () => AdministrativeRequestRepository());
+      () => AdministrativeRequestRepository(),
+    );
     Get.lazyPut<RequestsController>(
-      () => RequestsController(repo: Get.find<AdministrativeRequestRepository>()),
+      () =>
+          RequestsController(repo: Get.find<AdministrativeRequestRepository>()),
     );
   }
 }

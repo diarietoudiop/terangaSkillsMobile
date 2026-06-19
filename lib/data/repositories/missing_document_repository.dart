@@ -6,7 +6,7 @@ class MissingDocumentRepository {
   final ApiClient _apiClient;
 
   MissingDocumentRepository({ApiClient? apiClient})
-      : _apiClient = apiClient ?? ApiClient();
+    : _apiClient = apiClient ?? ApiClient();
 
   Future<MissingDocumentModel> create({
     required String title,

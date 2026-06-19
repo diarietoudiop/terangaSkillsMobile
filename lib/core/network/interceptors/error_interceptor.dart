@@ -29,7 +29,10 @@ class ErrorInterceptor extends Interceptor {
         requestOptions: err.requestOptions,
         response: err.response,
         type: err.type,
-        error: AppException(message: message, statusCode: err.response?.statusCode),
+        error: AppException(
+          message: message,
+          statusCode: err.response?.statusCode,
+        ),
       ),
     );
   }
@@ -37,8 +40,7 @@ class ErrorInterceptor extends Interceptor {
   String? _parseServerMessage(dynamic data) {
     if (data == null) return null;
     if (data is Map) {
-      return data['message']?.toString() ??
-          data['error']?.toString();
+      return data['message']?.toString() ?? data['error']?.toString();
     }
     return null;
   }

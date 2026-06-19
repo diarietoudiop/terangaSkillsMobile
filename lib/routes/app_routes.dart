@@ -26,4 +26,7 @@ class AppRoutes {
 
   // Dashboard
   static const String dashboard = '/dashboard';
+
+  // Investment Projects
+  static const String investmentProjectsList = '/investment-projects';
 }

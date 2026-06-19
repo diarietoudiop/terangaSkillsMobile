@@ -26,12 +26,16 @@ class ComplaintDetailView extends GetView<ComplaintsController> {
           icon: const Icon(Icons.arrow_back_ios_rounded),
           onPressed: Get.back,
         ),
-        title: Text('Détail de la réclamation', style: AppTextStyles.titleMedium),
+        title: Text(
+          'Détail de la réclamation',
+          style: AppTextStyles.titleMedium,
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary));
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
         final c = controller.selectedComplaint.value;
         if (c == null) return const SizedBox.shrink();
@@ -61,8 +65,11 @@ class ComplaintDetailView extends GetView<ComplaintsController> {
                       decoration: BoxDecoration(
                         color: AppColors.error.withOpacity(0.1),
                       ),
-                      child: const Icon(Icons.broken_image_rounded,
-                          color: AppColors.error, size: 48),
+                      child: const Icon(
+                        Icons.broken_image_rounded,
+                        color: AppColors.error,
+                        size: 48,
+                      ),
                     ),
                   ),
                 ),
@@ -77,17 +84,20 @@ class ComplaintDetailView extends GetView<ComplaintsController> {
               _InfoCard(label: 'Titre', value: c.title),
               _InfoCard(label: 'Description', value: c.description),
               _InfoCard(
-                  label: 'Date de signalement',
-                  value:
-                      '${c.createdAt.day}/${c.createdAt.month}/${c.createdAt.year}'),
-              
+                label: 'Date de signalement',
+                value:
+                    '${c.createdAt.day}/${c.createdAt.month}/${c.createdAt.year}',
+              ),
+
               if (c.hasLocation)
                 _InfoCard(
-                    label: 'Position GPS',
-                    value: '${c.latitude!.toStringAsFixed(4)}, ${c.longitude!.toStringAsFixed(4)}'),
+                  label: 'Position GPS',
+                  value:
+                      '${c.latitude!.toStringAsFixed(4)}, ${c.longitude!.toStringAsFixed(4)}',
+                ),
 
               const SizedBox(height: 24),
-              
+
               // ─── Timeline ───────────────────────────
               if (c.history != null && c.history!.isNotEmpty) ...[
                 Text('Historique', style: AppTextStyles.titleMedium),
@@ -169,7 +179,10 @@ class _InfoCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.darkCard.withOpacity(0.55),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder.withOpacity(0.4), width: 0.8),
+          border: Border.all(
+            color: AppColors.darkBorder.withOpacity(0.4),
+            width: 0.8,
+          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,9 +200,7 @@ class _InfoCard extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  height: 1.4,
-                ),
+                style: AppTextStyles.bodyMedium.copyWith(height: 1.4),
               ),
             ),
           ],

@@ -17,7 +17,8 @@ class ProfileDrawer extends StatelessWidget {
     final auth = Get.find<AuthController>();
     final homeController = Get.find<HomeController>();
     final connService = Get.find<ConnectivityService>();
-    final isDarkMode = (GetStorage().read<bool>('is_dark_mode') ?? Get.isPlatformDarkMode).obs;
+    final isDarkMode =
+        (GetStorage().read<bool>('is_dark_mode') ?? Get.isPlatformDarkMode).obs;
 
     return Drawer(
       backgroundColor: AppColors.darkBackground,
@@ -31,10 +32,24 @@ class ProfileDrawer extends StatelessWidget {
               final lastName = user?.lastName ?? '';
               final email = user?.email ?? '';
               final phone = user?.phone ?? 'Non spécifié';
-              final initial = firstName.isNotEmpty ? firstName[0].toUpperCase() : 'U';
+              final initial = firstName.isNotEmpty
+                  ? firstName[0].toUpperCase()
+                  : 'U';
+
+              String roleText = user?.role == 'AGENT' ? 'Agent' : 'Citoyen';
+              if (user?.isAgent == true && user?.service != null) {
+                final srvName =
+                    user!.service!['name'] ?? user.service!['title'] ?? '';
+                if (srvName.isNotEmpty) {
+                  roleText += ' - Service $srvName';
+                }
+              }
 
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 28,
+                ),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: AppColors.darkBorder, width: 0.8),
@@ -77,6 +92,24 @@ class ProfileDrawer extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  roleText,
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -85,20 +118,31 @@ class ProfileDrawer extends StatelessWidget {
                     const SizedBox(height: 20),
                     // Phone Info Card
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.darkSurface.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.darkBorder.withOpacity(0.5)),
+                        border: Border.all(
+                          color: AppColors.darkBorder.withOpacity(0.5),
+                        ),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Iconsax.call, color: AppColors.primary, size: 16),
+                          const Icon(
+                            Iconsax.call,
+                            color: AppColors.primary,
+                            size: 16,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'Tél : $phone',
                             style: AppTextStyles.bodySmall.copyWith(
-                              color: Get.isDarkMode ? AppColors.grey300 : AppColors.grey600,
+                              color: Get.isDarkMode
+                                  ? AppColors.grey300
+                                  : AppColors.grey600,
                             ),
                           ),
                         ],
@@ -109,7 +153,10 @@ class ProfileDrawer extends StatelessWidget {
                     Obx(() {
                       final connected = connService.isConnected.value;
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: connected
                               ? AppColors.success.withOpacity(0.1)
@@ -125,15 +172,23 @@ class ProfileDrawer extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              connected ? Icons.wifi_rounded : Icons.wifi_off_rounded,
-                              color: connected ? AppColors.success : AppColors.error,
+                              connected
+                                  ? Icons.wifi_rounded
+                                  : Icons.wifi_off_rounded,
+                              color: connected
+                                  ? AppColors.success
+                                  : AppColors.error,
                               size: 16,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              connected ? 'Connexion : En ligne' : 'Connexion : Hors ligne',
+                              connected
+                                  ? 'Connexion : En ligne'
+                                  : 'Connexion : Hors ligne',
                               style: AppTextStyles.bodySmall.copyWith(
-                                color: connected ? AppColors.success : AppColors.error,
+                                color: connected
+                                    ? AppColors.success
+                                    : AppColors.error,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -149,7 +204,10 @@ class ProfileDrawer extends StatelessWidget {
             // ─── Menu Navigation Options ───────────────────
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 16,
+                ),
                 children: [
                   _DrawerItem(
                     icon: Iconsax.home,
@@ -183,7 +241,19 @@ class ProfileDrawer extends StatelessWidget {
                       homeController.changeTab(3);
                     },
                   ),
-                  Divider(color: AppColors.darkBorder, height: 24, thickness: 0.8),
+                  _DrawerItem(
+                    icon: Iconsax.building,
+                    label: 'Projets d\'Investissement',
+                    onTap: () {
+                      Get.back();
+                      Get.toNamed(AppRoutes.investmentProjectsList);
+                    },
+                  ),
+                  Divider(
+                    color: AppColors.darkBorder,
+                    height: 24,
+                    thickness: 0.8,
+                  ),
                   _DrawerItem(
                     icon: Iconsax.scan,
                     label: 'Scanner QR Code',
@@ -192,33 +262,41 @@ class ProfileDrawer extends StatelessWidget {
                       Get.toNamed(AppRoutes.qrScan);
                     },
                   ),
-                  Divider(color: AppColors.darkBorder, height: 24, thickness: 0.8),
-                  Obx(() => ListTile(
-                    leading: Icon(
-                      isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
-                      color: AppColors.grey400,
-                      size: 22,
-                    ),
-                    title: Text(
-                      'Mode sombre',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.text,
-                        fontWeight: FontWeight.w500,
+                  Divider(
+                    color: AppColors.darkBorder,
+                    height: 24,
+                    thickness: 0.8,
+                  ),
+                  Obx(
+                    () => ListTile(
+                      leading: Icon(
+                        isDarkMode.value ? Iconsax.moon : Iconsax.sun_1,
+                        color: AppColors.grey400,
+                        size: 22,
+                      ),
+                      title: Text(
+                        'Mode sombre',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.text,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      trailing: Switch.adaptive(
+                        value: isDarkMode.value,
+                        activeColor: AppColors.primary,
+                        onChanged: (val) {
+                          isDarkMode.value = val;
+                          GetStorage().write('is_dark_mode', val);
+                          Get.changeThemeMode(
+                            val ? ThemeMode.dark : ThemeMode.light,
+                          );
+                        },
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    trailing: Switch.adaptive(
-                      value: isDarkMode.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (val) {
-                        isDarkMode.value = val;
-                        GetStorage().write('is_dark_mode', val);
-                        Get.changeThemeMode(val ? ThemeMode.dark : ThemeMode.light);
-                      },
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  )),
+                  ),
                 ],
               ),
             ),
@@ -242,7 +320,9 @@ class ProfileDrawer extends StatelessWidget {
                   icon: const Icon(Iconsax.logout, color: AppColors.error),
                   label: Text(
                     'Se déconnecter',
-                    style: AppTextStyles.buttonText.copyWith(color: AppColors.error),
+                    style: AppTextStyles.buttonText.copyWith(
+                      color: AppColors.error,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: AppColors.error),
@@ -283,9 +363,7 @@ class _DrawerItem extends StatelessWidget {
         ),
       ),
       onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       hoverColor: AppColors.primary.withOpacity(0.08),
       splashColor: AppColors.primary.withOpacity(0.15),
     );

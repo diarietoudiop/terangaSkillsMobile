@@ -21,8 +21,10 @@ class QrScanView extends GetView<QrController> {
           icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
           onPressed: Get.back,
         ),
-        title: Text('Scanner QR Code',
-            style: AppTextStyles.titleMedium.copyWith(color: Colors.white)),
+        title: Text(
+          'Scanner QR Code',
+          style: AppTextStyles.titleMedium.copyWith(color: Colors.white),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.flash_on_rounded, color: Colors.white),
@@ -128,9 +130,7 @@ class _ResultSheet extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                isValid
-                    ? Icons.verified_rounded
-                    : Icons.cancel_rounded,
+                isValid ? Icons.verified_rounded : Icons.cancel_rounded,
                 color: isValid ? AppColors.success : AppColors.error,
                 size: 40,
               ),
@@ -144,21 +144,27 @@ class _ResultSheet extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (result.document != null) ...[
-              Text(result.document.name ?? '',
-                  style: AppTextStyles.titleMedium),
+              Text(
+                result.document.name ?? '',
+                style: AppTextStyles.titleMedium,
+              ),
               const SizedBox(height: 8),
               Text(
                 'Créé le : ${result.document.createdAt.day}/${result.document.createdAt.month}/${result.document.createdAt.year}',
-                style: AppTextStyles.bodySmall
-                    .copyWith(color: AppColors.grey400),
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.grey400,
+                ),
               ),
             ],
             if (result.message != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: Text(result.message,
-                    style: AppTextStyles.bodySmall
-                        .copyWith(color: AppColors.grey500)),
+                child: Text(
+                  result.message,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.grey500,
+                  ),
+                ),
               ),
           ],
         ),

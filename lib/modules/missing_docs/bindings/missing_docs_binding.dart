@@ -7,6 +7,7 @@ class MissingDocsBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<MissingDocumentRepository>(() => MissingDocumentRepository());
     Get.lazyPut<MissingDocsController>(
-        () => MissingDocsController(repo: Get.find<MissingDocumentRepository>()));
+      () => MissingDocsController(repo: Get.find<MissingDocumentRepository>()),
+    );
   }
 }

@@ -1,8 +1,12 @@
 import 'user_model.dart';
+import 'request_type_model.dart';
 
 class AdministrativeRequestModel {
   final String id;
+  /// Legacy field kept for backward compat – maps to requestType.name
   final String type;
+  final String? requestTypeId;
+  final RequestTypeModel? requestType;
   final String title;
   final String description;
   final dynamic data;
@@ -15,10 +19,13 @@ class AdministrativeRequestModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<ActionLogModel>? history;
+  final Map<String, dynamic>? document;
 
   const AdministrativeRequestModel({
     required this.id,
     required this.type,
+    this.requestTypeId,
+    this.requestType,
     required this.title,
     required this.description,
     this.data,
@@ -31,20 +38,31 @@ class AdministrativeRequestModel {
     required this.createdAt,
     required this.updatedAt,
     this.history,
+    this.document,
   });
 
   factory AdministrativeRequestModel.fromJson(Map<String, dynamic> json) {
     final map = (json['data'] is Map && !json.containsKey('title'))
         ? json['data'] as Map<String, dynamic>
         : json;
+
+    // requestType object from the API
+    final rtMap = map['requestType'] as Map<String, dynamic>?;
+    final rtName = rtMap?['name']?.toString() ?? '';
+    // 'type' can come from legacy enum or from requestType.name
+    final typeStr = map['type']?.toString() ?? rtName;
+
     return AdministrativeRequestModel(
       id: map['id']?.toString() ?? '',
-      type: map['type'] as String? ?? 'OTHER',
+      type: typeStr.isNotEmpty ? typeStr : 'OTHER',
+      requestTypeId: map['requestTypeId']?.toString(),
+      requestType:
+          rtMap != null ? RequestTypeModel.fromJson(rtMap) : null,
       title: map['title'] as String? ?? '',
       description: map['description'] as String? ?? '',
       data: map['data'],
       attachments: List<String>.from(map['attachments'] as List? ?? []),
-      status: map['status'] as String? ?? 'PENDING',
+      status: map['status'] as String? ?? 'SUBMITTED',
       citizenId: map['citizenId']?.toString() ?? '',
       citizen: map['citizen'] != null
           ? UserModel.fromJson(map['citizen'] as Map<String, dynamic>)
@@ -61,25 +79,26 @@ class AdministrativeRequestModel {
           : DateTime.now(),
       history: map['history'] != null
           ? (map['history'] as List)
-              .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
+      document: map['document'] as Map<String, dynamic>?,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'type': type,
-        'title': title,
-        'description': description,
-        'data': data,
-        'attachments': attachments,
-        'status': status,
-        'citizenId': citizenId,
-        'assignedAgentId': assignedAgentId,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'id': id,
+    'type': type,
+    'title': title,
+    'description': description,
+    'data': data,
+    'attachments': attachments,
+    'status': status,
+    'citizenId': citizenId,
+    'assignedAgentId': assignedAgentId,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 }
 
 class ActionLogModel {

@@ -8,7 +8,7 @@ class QrController extends GetxController {
   final DocumentRepository _repo;
 
   QrController({DocumentRepository? repo})
-      : _repo = repo ?? DocumentRepository();
+    : _repo = repo ?? DocumentRepository();
 
   final isVerifying = false.obs;
   final verificationResult = Rxn<DocumentVerificationModel>();
@@ -29,7 +29,8 @@ class QrController extends GetxController {
   String? _extractDocumentId(String raw) {
     // Robustly extract standard 36-char UUID format from any URL or string
     final uuidRegex = RegExp(
-        r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
+      r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+    );
     final match = uuidRegex.firstMatch(raw);
     if (match != null) {
       return match.group(0);
@@ -44,8 +45,9 @@ class QrController extends GetxController {
       final result = await _repo.verifyDocument(id);
       verificationResult.value = result;
     } on DioException catch (e) {
-      AppSnackbar.error(e.error?.toString().split(':').last.trim() ??
-          'Erreur de vérification');
+      AppSnackbar.error(
+        e.error?.toString().split(':').last.trim() ?? 'Erreur de vérification',
+      );
     } finally {
       isVerifying.value = false;
     }

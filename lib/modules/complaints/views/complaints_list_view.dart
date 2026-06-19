@@ -67,7 +67,9 @@ class ComplaintsListView extends GetView<ComplaintsController> {
                   Text(
                     'Signalez un problème ou une anomalie dans votre commune.',
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey500),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.grey500,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton.icon(
@@ -117,8 +119,10 @@ class ComplaintsListView extends GetView<ComplaintsController> {
                   child: InkWell(
                     onTap: () {
                       controller.selectedComplaint.value = c;
-                      Get.toNamed(AppRoutes.complaintDetail,
-                          arguments: {'id': c.id});
+                      Get.toNamed(
+                        AppRoutes.complaintDetail,
+                        arguments: {'id': c.id},
+                      );
                     },
                     borderRadius: BorderRadius.circular(16),
                     child: Padding(
@@ -155,7 +159,8 @@ class ComplaintsListView extends GetView<ComplaintsController> {
                                 Text(
                                   c.description,
                                   style: AppTextStyles.bodySmall.copyWith(
-                                      color: AppColors.grey500),
+                                    color: AppColors.grey500,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -164,18 +169,21 @@ class ComplaintsListView extends GetView<ComplaintsController> {
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 3),
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: statusColor.withOpacity(0.12),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
                                         statusLabel,
-                                        style: AppTextStyles.labelSmall.copyWith(
-                                          color: statusColor,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                        style: AppTextStyles.labelSmall
+                                            .copyWith(
+                                              color: statusColor,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
                                     ),
                                     const Spacer(),
