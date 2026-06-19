@@ -18,7 +18,9 @@ class DocumentModel {
   });
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
-    final map = (json['data'] is Map && !json.containsKey('name')) ? json['data'] as Map<String, dynamic> : json;
+    final map = (json['data'] is Map && !json.containsKey('name'))
+        ? json['data'] as Map<String, dynamic>
+        : json;
     return DocumentModel(
       id: map['id']?.toString() ?? '',
       name: map['name']?.toString() ?? '',
@@ -33,14 +35,14 @@ class DocumentModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'fileUrl': fileUrl,
-        'qrCodeUrl': qrCodeUrl,
-        'isVerified': isVerified,
-        'administrativeRequestId': administrativeRequestId,
-        'createdAt': createdAt.toIso8601String(),
-      };
+    'id': id,
+    'name': name,
+    'fileUrl': fileUrl,
+    'qrCodeUrl': qrCodeUrl,
+    'isVerified': isVerified,
+    'administrativeRequestId': administrativeRequestId,
+    'createdAt': createdAt.toIso8601String(),
+  };
 }
 
 class DocumentVerificationModel {
@@ -55,7 +57,10 @@ class DocumentVerificationModel {
   });
 
   factory DocumentVerificationModel.fromJson(Map<String, dynamic> json) {
-    final map = (json['data'] is Map && !json.containsKey('isVerified') && !json.containsKey('isValid'))
+    final map =
+        (json['data'] is Map &&
+            !json.containsKey('isVerified') &&
+            !json.containsKey('isValid'))
         ? json['data'] as Map<String, dynamic>
         : json;
     return DocumentVerificationModel(

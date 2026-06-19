@@ -2,6 +2,7 @@ class AppRoutes {
   AppRoutes._();
 
   static const String splash = '/splash';
+  static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
@@ -29,4 +30,7 @@ class AppRoutes {
 
   // AI Assistant
   static const String aiAssistant = '/ai-assistant';
+
+  // Investment Projects
+  static const String investmentProjectsList = '/investment-projects';
 }

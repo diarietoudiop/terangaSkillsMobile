@@ -6,7 +6,7 @@ class ComplaintRepository {
   final ApiClient _apiClient;
 
   ComplaintRepository({ApiClient? apiClient})
-      : _apiClient = apiClient ?? ApiClient();
+    : _apiClient = apiClient ?? ApiClient();
 
   Future<ComplaintModel> createComplaint({
     required String title,

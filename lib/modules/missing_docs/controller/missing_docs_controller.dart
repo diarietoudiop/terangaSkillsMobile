@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide MultipartFile;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/missing_document_model.dart';
 import '../../../data/repositories/missing_document_repository.dart';
 
@@ -11,7 +12,7 @@ class MissingDocsController extends GetxController {
   final MissingDocumentRepository _repo;
 
   MissingDocsController({MissingDocumentRepository? repo})
-      : _repo = repo ?? MissingDocumentRepository();
+    : _repo = repo ?? MissingDocumentRepository();
 
   final isLoading = false.obs;
   final isSubmitting = false.obs;
@@ -65,7 +66,9 @@ class MissingDocsController extends GetxController {
         if (perm == LocationPermission.denied) return;
       }
       final pos = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       currentPosition.value = pos;
       AppSnackbar.success('Position capturée !');
@@ -76,7 +79,9 @@ class MissingDocsController extends GetxController {
 
   Future<void> pickPhoto() async {
     final f = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 80);
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
     if (f != null) pickedPhoto.value = f;
   }
 
@@ -90,8 +95,10 @@ class MissingDocsController extends GetxController {
       isSubmitting.value = true;
       MultipartFile? multiFile;
       if (pickedPhoto.value != null) {
-        multiFile = await MultipartFile.fromFile(pickedPhoto.value!.path,
-            filename: pickedPhoto.value!.name);
+        multiFile = await MultipartFile.fromFile(
+          pickedPhoto.value!.path,
+          filename: pickedPhoto.value!.name,
+        );
       }
       await _repo.create(
         title: titleController.value.text.trim(),
@@ -122,6 +129,10 @@ class MissingDocsController extends GetxController {
     currentPosition.value = null;
   }
 
-  String _msg(DioException e) =>
-      e.error?.toString().split(':').last.trim() ?? 'Erreur réseau';
+  String _msg(DioException e) {
+    final rawMsg = e.response?.data?['message']?.toString() ??
+        e.error?.toString().split(':').last.trim() ??
+        'Erreur réseau';
+    return ErrorTranslator.translate(rawMsg);
+  }
 }

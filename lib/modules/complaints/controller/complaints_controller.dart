@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide MultipartFile;
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/complaint_model.dart';
 import '../../../data/repositories/complaint_repository.dart';
 
@@ -11,7 +12,7 @@ class ComplaintsController extends GetxController {
   final ComplaintRepository _repo;
 
   ComplaintsController({ComplaintRepository? repo})
-      : _repo = repo ?? ComplaintRepository();
+    : _repo = repo ?? ComplaintRepository();
 
   final isLoading = false.obs;
   final isSubmitting = false.obs;
@@ -78,7 +79,9 @@ class ComplaintsController extends GetxController {
   Future<void> pickPhoto() async {
     final picker = ImagePicker();
     final file = await picker.pickImage(
-        source: ImageSource.camera, imageQuality: 80);
+      source: ImageSource.camera,
+      imageQuality: 80,
+    );
     if (file != null) pickedPhoto.value = file;
   }
 
@@ -122,6 +125,10 @@ class ComplaintsController extends GetxController {
     currentPosition.value = null;
   }
 
-  String _msg(DioException e) =>
-      e.error?.toString().split(':').last.trim() ?? 'Erreur réseau';
+  String _msg(DioException e) {
+    final rawMsg = e.response?.data?['message']?.toString() ??
+        e.error?.toString().split(':').last.trim() ??
+        'Erreur réseau';
+    return ErrorTranslator.translate(rawMsg);
+  }
 }

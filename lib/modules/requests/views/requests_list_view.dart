@@ -7,14 +7,25 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/status_utils.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/requests_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class RequestsListView extends GetView<RequestsController> {
   const RequestsListView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final auth = Get.find<AuthController>();
+    final isAgent = auth.currentUser.value?.isAgent ?? false;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
         title: Text('Mes Demandes', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
@@ -42,8 +53,10 @@ class RequestsListView extends GetView<RequestsController> {
                 date: req.createdAt,
                 onTap: () {
                   controller.selectedRequest.value = req;
-                  Get.toNamed(AppRoutes.requestDetail,
-                      arguments: {'id': req.id});
+                  Get.toNamed(
+                    AppRoutes.requestDetail,
+                    arguments: {'id': req.id},
+                  );
                 },
               );
             },
@@ -73,6 +86,8 @@ class RequestsListView extends GetView<RequestsController> {
   }
 
   Widget _buildEmpty() {
+    final auth = Get.find<AuthController>();
+    final isAgent = auth.currentUser.value?.isAgent ?? false;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -92,24 +107,31 @@ class RequestsListView extends GetView<RequestsController> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('Aucune demande', style: AppTextStyles.titleMedium),
+            Text(
+              isAgent ? 'Aucune demande citoyenne' : 'Aucune demande',
+              style: AppTextStyles.titleMedium,
+            ),
             const SizedBox(height: 8),
             Text(
-              'Soumettez votre première demande administrative en quelques clics !',
+              isAgent
+                  ? 'Toutes les demandes de la commune ont été traitées.'
+                  : 'Soumettez votre première demande administrative en quelques clics !',
               textAlign: TextAlign.center,
               style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey500),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () => Get.toNamed(AppRoutes.createRequest),
-              icon: const Icon(Icons.add_rounded),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            if (!isAgent) ...[
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () => Get.toNamed(AppRoutes.createRequest),
+                icon: const Icon(Icons.add_rounded),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
+                label: const Text('Nouvelle demande'),
               ),
-              label: const Text('Nouvelle demande'),
-            ),
+            ],
           ],
         ),
       ),
@@ -141,10 +163,7 @@ class _RequestCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.darkCard.withOpacity(0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: statusColor.withOpacity(0.22),
-          width: 0.8,
-        ),
+        border: Border.all(color: statusColor.withOpacity(0.22), width: 0.8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
@@ -201,7 +220,9 @@ class _RequestCard extends StatelessWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: statusColor.withOpacity(0.12),
                               borderRadius: BorderRadius.circular(6),
@@ -218,9 +239,7 @@ class _RequestCard extends StatelessWidget {
                           const Spacer(),
                           Text(
                             '${date.day}/${date.month}/${date.year}',
-                            style: AppTextStyles.caption.copyWith(
-                              fontSize: 11,
-                            ),
+                            style: AppTextStyles.caption.copyWith(fontSize: 11),
                           ),
                         ],
                       ),

@@ -6,12 +6,13 @@ class StatusUtils {
 
   static Color requestStatusColor(String status) {
     switch (status.toUpperCase()) {
-      case 'PENDING':
+      case 'SUBMITTED':
+      case 'ASSIGNED':
         return AppColors.statusPending;
-      case 'IN_REVIEW':
+      case 'IN_PROGRESS':
+      case 'PROCESSED':
+      case 'VALIDATED':
         return AppColors.statusInReview;
-      case 'APPROVED':
-        return AppColors.statusApproved;
       case 'REJECTED':
         return AppColors.statusRejected;
       case 'COMPLETED':
@@ -23,16 +24,20 @@ class StatusUtils {
 
   static String requestStatusLabel(String status) {
     switch (status.toUpperCase()) {
-      case 'PENDING':
-        return 'En attente';
-      case 'IN_REVIEW':
+      case 'SUBMITTED':
+        return 'Soumise';
+      case 'ASSIGNED':
+        return 'Assignée';
+      case 'IN_PROGRESS':
         return 'En cours';
-      case 'APPROVED':
-        return 'Approuvé';
+      case 'PROCESSED':
+        return 'Traitée';
+      case 'VALIDATED':
+        return 'Validée';
       case 'REJECTED':
-        return 'Rejeté';
+        return 'Rejetée';
       case 'COMPLETED':
-        return 'Complété';
+        return 'Terminée';
       default:
         return status;
     }

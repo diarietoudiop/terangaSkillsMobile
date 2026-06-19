@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import '../../core/network/api_client.dart';
 import '../models/auth_response_model.dart';
 import '../models/user_model.dart';
@@ -6,13 +5,17 @@ import '../models/user_model.dart';
 class AuthRepository {
   final ApiClient _apiClient;
 
-  AuthRepository({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
+  AuthRepository({ApiClient? apiClient})
+    : _apiClient = apiClient ?? ApiClient();
 
   Future<AuthResponseModel> login({
     required String email,
     required String password,
   }) async {
-    final response = await _apiClient.login({'email': email, 'password': password});
+    final response = await _apiClient.login({
+      'email': email,
+      'password': password,
+    });
     return AuthResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 

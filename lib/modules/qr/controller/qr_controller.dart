@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/document_model.dart';
 import '../../../data/repositories/document_repository.dart';
 
@@ -8,7 +9,7 @@ class QrController extends GetxController {
   final DocumentRepository _repo;
 
   QrController({DocumentRepository? repo})
-      : _repo = repo ?? DocumentRepository();
+    : _repo = repo ?? DocumentRepository();
 
   final isVerifying = false.obs;
   final verificationResult = Rxn<DocumentVerificationModel>();
@@ -29,7 +30,8 @@ class QrController extends GetxController {
   String? _extractDocumentId(String raw) {
     // Robustly extract standard 36-char UUID format from any URL or string
     final uuidRegex = RegExp(
-        r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}');
+      r'[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+    );
     final match = uuidRegex.firstMatch(raw);
     if (match != null) {
       return match.group(0);
@@ -44,8 +46,10 @@ class QrController extends GetxController {
       final result = await _repo.verifyDocument(id);
       verificationResult.value = result;
     } on DioException catch (e) {
-      AppSnackbar.error(e.error?.toString().split(':').last.trim() ??
-          'Erreur de vérification');
+      final rawMsg = e.response?.data?['message']?.toString() ??
+          e.error?.toString().split(':').last.trim() ??
+          'Erreur de vérification';
+      AppSnackbar.error(ErrorTranslator.translate(rawMsg));
     } finally {
       isVerifying.value = false;
     }

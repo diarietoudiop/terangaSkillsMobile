@@ -31,22 +31,39 @@ class AuthTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: AppTextStyles.labelMedium.copyWith(color: AppColors.grey400)),
+        Text(
+          label,
+          style: AppTextStyles.labelMedium.copyWith(color: AppColors.grey600),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
           keyboardType: keyboardType,
           maxLines: maxLines,
-          style: AppTextStyles.bodyMedium,
+          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.grey900),
           validator: validator,
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: TextStyle(color: AppColors.grey400),
+            filled: true,
+            fillColor: AppColors.grey50,
             prefixIcon: prefixIcon != null
                 ? Icon(prefixIcon, color: AppColors.grey500, size: 20)
                 : null,
             suffixIcon: suffixIcon,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.lightBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.lightBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
           ),
         ),
       ],

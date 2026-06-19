@@ -2,49 +2,100 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide MultipartFile;
 import 'package:image_picker/image_picker.dart';
+import '../../../core/network/api_client.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/administrative_request_model.dart';
+import '../../../data/models/request_type_model.dart';
 import '../../../data/repositories/administrative_request_repository.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class RequestsController extends GetxController {
   final AdministrativeRequestRepository _repo;
+  final ApiClient _apiClient;
 
-  RequestsController({AdministrativeRequestRepository? repo})
-      : _repo = repo ?? AdministrativeRequestRepository();
+  RequestsController({
+    AdministrativeRequestRepository? repo,
+    ApiClient? apiClient,
+  })  : _repo = repo ?? AdministrativeRequestRepository(),
+        _apiClient = apiClient ?? ApiClient();
 
   // ─── State ───────────────────────────────────────────
   final isLoading = false.obs;
   final isSubmitting = false.obs;
+  final isLoadingTypes = false.obs;
   final uploadProgress = 0.0.obs;
   final requests = <AdministrativeRequestModel>[].obs;
   final selectedRequest = Rxn<AdministrativeRequestModel>();
 
+  // ─── Dynamic Request Types from API ──────────────────
+  final requestTypes = <RequestTypeModel>[].obs;
+
   // ─── Form ────────────────────────────────────────────
-  final selectedType = 'BIRTH_CERTIFICATE'.obs;
+  /// selectedTypeId holds the UUID of the selected RequestType
+  final selectedTypeId = ''.obs;
   final titleController = TextEditingController().obs;
   final descriptionController = TextEditingController().obs;
   final pickedFiles = <XFile>[].obs;
 
-  static const List<Map<String, String>> requestTypes = [
-    {'value': 'BIRTH_CERTIFICATE', 'label': 'Extrait de naissance'},
-    {'value': 'DEATH_CERTIFICATE', 'label': 'Acte de décès'},
-    {'value': 'RESIDENCE_CERTIFICATE', 'label': 'Certificat de résidence'},
-    {'value': 'LITERARY_COPY', 'label': 'Copie littérale'},
-    {'value': 'BIRTH_DECLARATION', 'label': 'Déclaration de naissance'},
-    {'value': 'OTHER', 'label': 'Autre'},
-  ];
+  /// Dynamic description hint based on selected type name
+  String get descriptionHint {
+    final rt = requestTypes.firstWhereOrNull(
+        (t) => t.id == selectedTypeId.value);
+    if (rt == null) return 'Informations complémentaires...';
+    final name = rt.name.toLowerCase();
+    if (name.contains('naissance')) {
+      return 'Nom du père, nom de la mère, date et lieu de naissance, n° registre...';
+    } else if (name.contains('décès') || name.contains('deces')) {
+      return 'Nom du défunt, date et lieu de décès, n° acte...';
+    } else if (name.contains('résidence') || name.contains('residence')) {
+      return 'Adresse complète, durée de résidence, motif de la demande...';
+    } else if (name.contains('mariage')) {
+      return 'Noms des époux, date et lieu du mariage, n° acte...';
+    }
+    return 'Précisez les informations nécessaires au traitement de votre demande...';
+  }
 
   @override
   void onInit() {
     super.onInit();
+    fetchRequestTypes();
     fetchMyRequests();
+  }
+
+  // ─── Load request types from backend ─────────────────
+  Future<void> fetchRequestTypes() async {
+    try {
+      isLoadingTypes.value = true;
+      final response = await _apiClient.getRequestTypes();
+      final data = response.data;
+      final List raw = (data is Map)
+          ? (data['data'] ?? data['requestTypes'] ?? data as List? ?? [])
+          : (data as List? ?? []);
+      requestTypes.value = raw
+          .map((e) => RequestTypeModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      if (requestTypes.isNotEmpty && selectedTypeId.value.isEmpty) {
+        selectedTypeId.value = requestTypes.first.id;
+      }
+    } catch (_) {
+      // Silent fail — form still shows an empty dropdown with a clear message
+    } finally {
+      isLoadingTypes.value = false;
+    }
   }
 
   // ─── Fetch ───────────────────────────────────────────
   Future<void> fetchMyRequests() async {
     try {
       isLoading.value = true;
-      requests.value = await _repo.getMyRequests();
+      final auth = Get.find<AuthController>();
+      final isAgent = auth.currentUser.value?.isAgent ?? false;
+      if (isAgent) {
+        requests.value = await _repo.getAllRequests();
+      } else {
+        requests.value = await _repo.getMyRequests();
+      }
     } on DioException catch (e) {
       AppSnackbar.error(_msg(e));
     } finally {
@@ -65,6 +116,10 @@ class RequestsController extends GetxController {
 
   // ─── Submit ──────────────────────────────────────────
   Future<void> submitRequest() async {
+    if (selectedTypeId.value.isEmpty) {
+      AppSnackbar.warning('Veuillez sélectionner un type de demande.');
+      return;
+    }
     if (titleController.value.text.isEmpty ||
         descriptionController.value.text.isEmpty) {
       AppSnackbar.warning('Veuillez remplir tous les champs.');
@@ -74,20 +129,17 @@ class RequestsController extends GetxController {
       isSubmitting.value = true;
       uploadProgress.value = 0.0;
       final multiparts = await Future.wait(
-        pickedFiles.map((f) async => MultipartFile.fromFile(
-              f.path,
-              filename: f.name,
-            )),
+        pickedFiles.map(
+          (f) async => MultipartFile.fromFile(f.path, filename: f.name),
+        ),
       );
       await _repo.createRequest(
-        type: selectedType.value,
+        requestTypeId: selectedTypeId.value,
         title: titleController.value.text.trim(),
         description: descriptionController.value.text.trim(),
         files: multiparts.isEmpty ? null : multiparts,
         onSendProgress: (sent, total) {
-          if (total > 0) {
-            uploadProgress.value = sent / total;
-          }
+          if (total > 0) uploadProgress.value = sent / total;
         },
       );
       AppSnackbar.success('Demande soumise avec succès !');
@@ -98,6 +150,27 @@ class RequestsController extends GetxController {
       AppSnackbar.error(_msg(e));
     } finally {
       isSubmitting.value = false;
+    }
+  }
+
+  Future<void> generateDocumentAndComplete(
+    String requestId,
+    String content,
+  ) async {
+    try {
+      isLoading.value = true;
+      await _repo.updateStatus(requestId, 'COMPLETED');
+      await _repo.generateDocument(
+        requestId,
+        'Document_Final_$requestId.pdf',
+        content,
+      );
+      await fetchRequest(requestId);
+      AppSnackbar.success('Document généré et demande terminée.');
+    } catch (e) {
+      AppSnackbar.error('Erreur lors de la génération du document');
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -113,9 +186,15 @@ class RequestsController extends GetxController {
     titleController.value.clear();
     descriptionController.value.clear();
     pickedFiles.clear();
-    selectedType.value = 'BIRTH_CERTIFICATE';
+    if (requestTypes.isNotEmpty) {
+      selectedTypeId.value = requestTypes.first.id;
+    }
   }
 
-  String _msg(DioException e) =>
-      e.error?.toString().split(':').last.trim() ?? 'Erreur réseau';
+  String _msg(DioException e) {
+    final rawMsg = e.response?.data?['message']?.toString() ??
+        e.error?.toString().split(':').last.trim() ??
+        'Erreur réseau';
+    return ErrorTranslator.translate(rawMsg);
+  }
 }

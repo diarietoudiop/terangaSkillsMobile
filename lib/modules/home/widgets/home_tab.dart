@@ -44,7 +44,7 @@ class HomeTab extends StatelessWidget {
                         Obx(() {
                           final name = auth.currentUser.value?.firstName ?? '';
                           return Text(
-                            'Bonjour, ${name.isNotEmpty ? name : 'Citoyen'} 👋',
+                            'Bonjour, ${name.isNotEmpty ? name : 'Citoyen'} ',
                             style: AppTextStyles.headlineSmall.copyWith(
                               color: AppColors.text,
                               fontWeight: FontWeight.bold,
@@ -144,11 +144,21 @@ class HomeTab extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 16),
+                  // ─── Investment Wide Card ───
+                  _PremiumWideCard(
+                    icon: Iconsax.building,
+                    label: 'Projets d\'investissement',
+                    subtitle: 'Consultez les projets en cours dans votre commune',
+                    iconColor: const Color(0xFFFBBF24),
+                    onTap: () => Get.toNamed(AppRoutes.investmentProjectsList),
+                  ),
                   const SizedBox(height: 32),
 
                   // ─── Recent Banner Premium ───
+                  final isAgent = auth.currentUser.value?.isAgent ?? false;
                   Text(
-                    'Mes dernières demandes',
+                    isAgent ? 'Dossiers Citoyens' : 'Mes dernières demandes',
                     style: AppTextStyles.titleMedium.copyWith(
                       color: AppColors.text,
                       fontWeight: FontWeight.w600,
@@ -156,6 +166,7 @@ class HomeTab extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   _PremiumRecentBanner(
+                    isAgent: isAgent,
                     onTap: () => Get.toNamed(AppRoutes.requestsList),
                   ),
                   const SizedBox(height: 40),
@@ -238,9 +249,89 @@ class _PremiumActionCard extends StatelessWidget {
   }
 }
 
+class _PremiumWideCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final Color iconColor;
+  final VoidCallback onTap;
+
+  const _PremiumWideCard({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.iconColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: iconColor.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: iconColor.withOpacity(0.25), width: 0.8),
+        boxShadow: [
+          BoxShadow(
+            color: iconColor.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 26),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: AppTextStyles.titleSmall.copyWith(
+                          color: AppColors.text,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: AppTextStyles.bodySmall
+                            .copyWith(color: AppColors.grey400, height: 1.3),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios_rounded,
+                    size: 14, color: iconColor),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PremiumRecentBanner extends StatelessWidget {
   final VoidCallback onTap;
-  const _PremiumRecentBanner({required this.onTap});
+  final bool isAgent;
+  const _PremiumRecentBanner({required this.onTap, required this.isAgent});
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +385,7 @@ class _PremiumRecentBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Voir mes demandes',
+                        isAgent ? 'Consulter les demandes' : 'Voir mes demandes',
                         style: AppTextStyles.titleSmall.copyWith(
                           color: AppColors.text,
                           fontWeight: FontWeight.w600,
@@ -302,9 +393,13 @@ class _PremiumRecentBanner extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Suivez l\'état de vos dossiers en temps réel',
+                        isAgent
+                            ? 'Validez ou rejetez les dossiers des citoyens'
+                            : 'Suivez l\'état de vos dossiers en temps réel',
                         style: AppTextStyles.bodySmall.copyWith(
-                          color: Get.isDarkMode ? AppColors.grey400 : AppColors.grey600,
+                          color: Get.isDarkMode
+                              ? AppColors.grey400
+                              : AppColors.grey600,
                         ),
                       ),
                     ],

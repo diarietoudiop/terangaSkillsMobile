@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/dashboard_model.dart';
 import '../../../data/repositories/dashboard_repository.dart';
 
@@ -8,7 +9,7 @@ class DashboardController extends GetxController {
   final DashboardRepository _repo;
 
   DashboardController({DashboardRepository? repo})
-      : _repo = repo ?? DashboardRepository();
+    : _repo = repo ?? DashboardRepository();
 
   final isLoading = false.obs;
   final stats = Rxn<DashboardStatsModel>();
@@ -24,8 +25,12 @@ class DashboardController extends GetxController {
       isLoading.value = true;
       stats.value = await _repo.getStats();
     } on DioException catch (e) {
-      AppSnackbar.error(e.error?.toString().split(':').last.trim() ??
-          'Impossible de charger les statistiques');
+      final rawMsg = e.response?.data?['message']?.toString() ??
+          e.error?.toString().split(':').last.trim() ??
+          'Impossible de charger les statistiques';
+      AppSnackbar.error(ErrorTranslator.translate(rawMsg));
+    } catch (e) {
+      AppSnackbar.error(ErrorTranslator.translate('Erreur: $e'));
     } finally {
       isLoading.value = false;
     }

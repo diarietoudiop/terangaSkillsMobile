@@ -13,14 +13,16 @@ class RegisterView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.grey800),
           onPressed: () => Get.back(),
         ),
-        title: Text('Créer un compte', style: AppTextStyles.titleMedium),
+        title: Text('Créer un compte', style: AppTextStyles.titleMedium.copyWith(color: AppColors.grey900)),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: AppColors.grey800),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -61,7 +63,10 @@ class RegisterView extends GetView<AuthController> {
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 10,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -72,10 +77,10 @@ class RegisterView extends GetView<AuthController> {
                     Container(
                       padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        color: AppColors.darkCard.withOpacity(0.65),
+                        color: AppColors.lightCard.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: AppColors.darkBorder.withOpacity(0.4),
+                          color: AppColors.lightBorder.withOpacity(0.8),
                           width: 1,
                         ),
                         boxShadow: [
@@ -90,18 +95,19 @@ class RegisterView extends GetView<AuthController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Rejoignez TerangaSkills 🇸🇳',
+                            'Rejoignez CIVILINK 🇸🇳',
                             style: AppTextStyles.headlineSmall.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               letterSpacing: -0.5,
+                              color: AppColors.grey900,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Créez votre espace citoyen numérique',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.grey400,
+                              color: AppColors.grey600,
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -111,7 +117,8 @@ class RegisterView extends GetView<AuthController> {
                             children: [
                               Expanded(
                                 child: AuthTextField(
-                                  controller: controller.firstNameController.value,
+                                  controller:
+                                      controller.firstNameController.value,
                                   label: 'Prénom',
                                   hint: 'Jean',
                                   prefixIcon: Icons.person_outline,
@@ -120,7 +127,8 @@ class RegisterView extends GetView<AuthController> {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: AuthTextField(
-                                  controller: controller.lastNameController.value,
+                                  controller:
+                                      controller.lastNameController.value,
                                   label: 'Nom',
                                   hint: 'Diop',
                                   prefixIcon: Icons.person_outline,
@@ -132,7 +140,8 @@ class RegisterView extends GetView<AuthController> {
 
                           // ─── Email ───
                           AuthTextField(
-                            controller: controller.registerEmailController.value,
+                            controller:
+                                controller.registerEmailController.value,
                             label: 'Email',
                             hint: 'votre@email.com',
                             keyboardType: TextInputType.emailAddress,
@@ -151,74 +160,87 @@ class RegisterView extends GetView<AuthController> {
                           const SizedBox(height: 14),
 
                           // ─── Password ───
-                          Obx(() => AuthTextField(
-                                controller: controller.registerPasswordController.value,
-                                label: 'Mot de passe',
-                                hint: 'min. 6 caractères',
-                                obscureText: !controller.isPasswordVisible.value,
-                                prefixIcon: Icons.lock_outline,
-                                suffixIcon: GestureDetector(
-                                  onTap: controller.togglePasswordVisibility,
-                                  child: Icon(
-                                    controller.isPasswordVisible.value
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: AppColors.grey500,
-                                    size: 20,
-                                  ),
+                          Obx(
+                            () => AuthTextField(
+                              controller:
+                                  controller.registerPasswordController.value,
+                              label: 'Mot de passe',
+                              hint: 'min. 6 caractères',
+                              obscureText: !controller.isPasswordVisible.value,
+                              prefixIcon: Icons.lock_outline,
+                              suffixIcon: GestureDetector(
+                                onTap: controller.togglePasswordVisibility,
+                                child: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.grey500,
+                                  size: 20,
                                 ),
-                              )),
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 14),
 
                           // ─── Confirm Password ───
-                          Obx(() => AuthTextField(
-                                controller: controller.confirmPasswordController.value,
-                                label: 'Confirmer le mot de passe',
-                                hint: '••••••••',
-                                obscureText: !controller.isConfirmPasswordVisible.value,
-                                prefixIcon: Icons.lock_outline,
-                                suffixIcon: GestureDetector(
-                                  onTap: controller.toggleConfirmPasswordVisibility,
-                                  child: Icon(
-                                    controller.isConfirmPasswordVisible.value
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: AppColors.grey500,
-                                    size: 20,
-                                  ),
+                          Obx(
+                            () => AuthTextField(
+                              controller:
+                                  controller.confirmPasswordController.value,
+                              label: 'Confirmer le mot de passe',
+                              hint: '••••••••',
+                              obscureText:
+                                  !controller.isConfirmPasswordVisible.value,
+                              prefixIcon: Icons.lock_outline,
+                              suffixIcon: GestureDetector(
+                                onTap:
+                                    controller.toggleConfirmPasswordVisibility,
+                                child: Icon(
+                                  controller.isConfirmPasswordVisible.value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.grey500,
+                                  size: 20,
                                 ),
-                              )),
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 28),
 
                           // ─── Register Button ───
-                          Obx(() => SizedBox(
-                                width: double.infinity,
-                                height: 52,
-                                child: ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : controller.register,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.primary,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    elevation: 0,
+                          Obx(
+                            () => SizedBox(
+                              width: double.infinity,
+                              height: 52,
+                              child: ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.register,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
                                   ),
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                          width: 22,
-                                          height: 22,
-                                          child: CircularProgressIndicator(
-                                              strokeWidth: 2.5, color: Colors.white),
-                                        )
-                                      : Text('Créer mon compte',
-                                          style: AppTextStyles.buttonText.copyWith(
-                                            color: Colors.white,
-                                          )),
+                                  elevation: 0,
                                 ),
-                              )),
+                                child: controller.isLoading.value
+                                    ? const SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Créer mon compte',
+                                        style: AppTextStyles.buttonText
+                                            .copyWith(color: Colors.white),
+                                      ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -231,8 +253,9 @@ class RegisterView extends GetView<AuthController> {
                         child: RichText(
                           text: TextSpan(
                             text: 'Déjà inscrit ? ',
-                            style: AppTextStyles.bodySmall
-                                .copyWith(color: AppColors.grey500),
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.grey500,
+                            ),
                             children: [
                               TextSpan(
                                 text: 'Se connecter',

@@ -6,6 +6,8 @@ import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../controller/dashboard_controller.dart';
+import '../../agent/controllers/agent_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -14,6 +16,16 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<AgentController>()) {
+              Get.find<AgentController>().openDrawer();
+            } else if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
         title: Text('Tableau de bord', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
@@ -32,7 +44,10 @@ class DashboardView extends GetView<DashboardController> {
               children: [
                 const Icon(Iconsax.chart_1, size: 72, color: AppColors.grey600),
                 const SizedBox(height: 16),
-                Text('Statistiques indisponibles', style: AppTextStyles.titleMedium),
+                Text(
+                  'Statistiques indisponibles',
+                  style: AppTextStyles.titleMedium,
+                ),
                 const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: controller.fetchStats,
@@ -48,51 +63,58 @@ class DashboardView extends GetView<DashboardController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ─── KPI Row ───
-              Text('KPIs Globaux', style: AppTextStyles.titleMedium),
+              // Text('KPIs Globaux', style: AppTextStyles.titleMedium),
               const SizedBox(height: 16),
-              Row(children: [
-                Expanded(
-                  child: _KpiCard(
-                    label: 'Citoyens',
-                    value: s.users.total.toString(),
-                    icon: Iconsax.people,
-                    color: AppColors.info,
+              Row(
+                children: [
+                  Expanded(
+                    child: _KpiCard(
+                      label: 'Citoyens',
+                      value: s.users.total.toString(),
+                      icon: Iconsax.people,
+                      color: AppColors.info,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _KpiCard(
-                    label: 'Demandes',
-                    value: s.administrativeRequests.total.toString(),
-                    icon: Iconsax.document_text,
-                    color: AppColors.primary,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _KpiCard(
+                      label: 'Demandes',
+                      value: s.administrativeRequests.total.toString(),
+                      icon: Iconsax.document_text,
+                      color: AppColors.primary,
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               const SizedBox(height: 12),
-              Row(children: [
-                Expanded(
-                  child: _KpiCard(
-                    label: 'Réclamations',
-                    value: s.complaints.total.toString(),
-                    icon: Iconsax.danger,
-                    color: AppColors.warning,
+              Row(
+                children: [
+                  Expanded(
+                    child: _KpiCard(
+                      label: 'Réclamations',
+                      value: s.complaints.total.toString(),
+                      icon: Iconsax.danger,
+                      color: AppColors.warning,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _KpiCard(
-                    label: 'Docs Perdus',
-                    value: s.missingDocuments.total.toString(),
-                    icon: Iconsax.search_normal_1,
-                    color: AppColors.error,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _KpiCard(
+                      label: 'Docs Perdus',
+                      value: s.missingDocuments.total.toString(),
+                      icon: Iconsax.search_normal_1,
+                      color: AppColors.error,
+                    ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               const SizedBox(height: 28),
 
               // ─── Requests Chart ───
-              Text('Demandes administratives', style: AppTextStyles.titleMedium),
+              Text(
+                'Demandes administratives',
+                style: AppTextStyles.titleMedium,
+              ),
               const SizedBox(height: 16),
               _RequestsChart(stats: s.administrativeRequests),
               const SizedBox(height: 28),
@@ -169,10 +191,7 @@ class _KpiCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.darkCard.withOpacity(0.55),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: color.withOpacity(0.25),
-          width: 0.8,
-        ),
+        border: Border.all(color: color.withOpacity(0.25), width: 0.8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -250,26 +269,35 @@ class _RequestsChart extends StatelessWidget {
               PieChartData(
                 sectionsSpace: 3,
                 centerSpaceRadius: 40,
-                sections: [
-                  PieChartSectionData(
-                    value: pending,
-                    color: AppColors.statusPending,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                  PieChartSectionData(
-                    value: inProgress,
-                    color: AppColors.statusInReview,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                  PieChartSectionData(
-                    value: completed,
-                    color: AppColors.statusCompleted,
-                    radius: 35,
-                    showTitle: false,
-                  ),
-                ],
+                sections: (pending == 0 && inProgress == 0 && completed == 0)
+                    ? [
+                        PieChartSectionData(
+                          value: 1,
+                          color: AppColors.darkBorder,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                      ]
+                    : [
+                        PieChartSectionData(
+                          value: pending,
+                          color: AppColors.statusPending,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: inProgress,
+                          color: AppColors.statusInReview,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                        PieChartSectionData(
+                          value: completed,
+                          color: AppColors.statusCompleted,
+                          radius: 35,
+                          showTitle: false,
+                        ),
+                      ],
               ),
             ),
           ),
