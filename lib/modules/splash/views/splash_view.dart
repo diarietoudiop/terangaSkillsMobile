@@ -95,7 +95,7 @@ class SplashView extends GetView<SplashController> {
                         Text(
                           slide.title,
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.h1.copyWith(
+                          style: AppTextStyles.headlineMedium.copyWith(
                             color: const Color(0xFF111827),
                             fontWeight: FontWeight.w800,
                             fontSize: 26,
