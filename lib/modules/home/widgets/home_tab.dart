@@ -156,8 +156,9 @@ class HomeTab extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   // ─── Recent Banner Premium ───
+                  final isAgent = auth.currentUser.value?.isAgent ?? false;
                   Text(
-                    'Mes dernières demandes',
+                    isAgent ? 'Dossiers Citoyens' : 'Mes dernières demandes',
                     style: AppTextStyles.titleMedium.copyWith(
                       color: AppColors.text,
                       fontWeight: FontWeight.w600,
@@ -165,6 +166,7 @@ class HomeTab extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   _PremiumRecentBanner(
+                    isAgent: isAgent,
                     onTap: () => Get.toNamed(AppRoutes.requestsList),
                   ),
                   const SizedBox(height: 40),
@@ -328,7 +330,8 @@ class _PremiumWideCard extends StatelessWidget {
 
 class _PremiumRecentBanner extends StatelessWidget {
   final VoidCallback onTap;
-  const _PremiumRecentBanner({required this.onTap});
+  final bool isAgent;
+  const _PremiumRecentBanner({required this.onTap, required this.isAgent});
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +385,7 @@ class _PremiumRecentBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Voir mes demandes',
+                        isAgent ? 'Consulter les demandes' : 'Voir mes demandes',
                         style: AppTextStyles.titleSmall.copyWith(
                           color: AppColors.text,
                           fontWeight: FontWeight.w600,
@@ -390,7 +393,9 @@ class _PremiumRecentBanner extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Suivez l\'état de vos dossiers en temps réel',
+                        isAgent
+                            ? 'Validez ou rejetez les dossiers des citoyens'
+                            : 'Suivez l\'état de vos dossiers en temps réel',
                         style: AppTextStyles.bodySmall.copyWith(
                           color: Get.isDarkMode
                               ? AppColors.grey400

@@ -8,6 +8,7 @@ import '../../../core/utils/error_translator.dart';
 import '../../../data/models/administrative_request_model.dart';
 import '../../../data/models/request_type_model.dart';
 import '../../../data/repositories/administrative_request_repository.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class RequestsController extends GetxController {
   final AdministrativeRequestRepository _repo;
@@ -88,7 +89,13 @@ class RequestsController extends GetxController {
   Future<void> fetchMyRequests() async {
     try {
       isLoading.value = true;
-      requests.value = await _repo.getMyRequests();
+      final auth = Get.find<AuthController>();
+      final isAgent = auth.currentUser.value?.isAgent ?? false;
+      if (isAgent) {
+        requests.value = await _repo.getAllRequests();
+      } else {
+        requests.value = await _repo.getMyRequests();
+      }
     } on DioException catch (e) {
       AppSnackbar.error(_msg(e));
     } finally {

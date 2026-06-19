@@ -22,6 +22,8 @@ import '../modules/qr/bindings/qr_binding.dart';
 import '../modules/qr/views/qr_scan_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
+import '../modules/ai_assistant/bindings/ai_chat_binding.dart';
+import '../modules/ai_assistant/views/ai_chat_view.dart';
 import '../modules/investment_projects/bindings/investment_projects_binding.dart';
 import '../modules/investment_projects/views/investment_projects_list_view.dart';
 import '../modules/agent/bindings/agent_binding.dart';
@@ -120,6 +122,12 @@ class AppPages {
       name: AppRoutes.dashboard,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
+    ),
+    // AI Assistant
+    GetPage(
+      name: AppRoutes.aiAssistant,
+      page: () => const AiChatView(),
+      binding: AiChatBinding(),
     ),
     // Investment Projects
     GetPage(
