@@ -153,6 +153,23 @@ class HomeTab extends StatelessWidget {
                     iconColor: const Color(0xFFFBBF24),
                     onTap: () => Get.toNamed(AppRoutes.investmentProjectsList),
                   ),
+                  Obx(() {
+                    final isAgent = auth.currentUser.value?.isAgent ?? false;
+                    if (isAgent) return const SizedBox.shrink();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        _PremiumWideCard(
+                          icon: Iconsax.message,
+                          label: 'Assistant IA Wolof (TerangaAI)',
+                          subtitle: 'Laissez l\'IA vous guider et remplir vos démarches',
+                          iconColor: AppColors.primary,
+                          onTap: () => Get.toNamed(AppRoutes.aiAssistant),
+                        ),
+                      ],
+                    );
+                  }),
                   const SizedBox(height: 32),
 
                   // ─── Recent Banner Premium ───

@@ -253,6 +253,14 @@ class ProfileDrawer extends StatelessWidget {
                           Get.toNamed(AppRoutes.investmentProjectsList);
                         },
                       ),
+                      _DrawerItem(
+                        icon: Iconsax.message,
+                        label: 'Assistant IA Wolof',
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed(AppRoutes.aiAssistant);
+                        },
+                      ),
                       Divider(
                         color: AppColors.darkBorder,
                         height: 24,
