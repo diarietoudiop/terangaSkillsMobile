@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide MultipartFile;
 import 'package:image_picker/image_picker.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/administrative_request_model.dart';
 import '../../../data/models/request_type_model.dart';
 import '../../../data/repositories/administrative_request_repository.dart';
@@ -35,6 +36,24 @@ class RequestsController extends GetxController {
   final titleController = TextEditingController().obs;
   final descriptionController = TextEditingController().obs;
   final pickedFiles = <XFile>[].obs;
+
+  /// Dynamic description hint based on selected type name
+  String get descriptionHint {
+    final rt = requestTypes.firstWhereOrNull(
+        (t) => t.id == selectedTypeId.value);
+    if (rt == null) return 'Informations complémentaires...';
+    final name = rt.name.toLowerCase();
+    if (name.contains('naissance')) {
+      return 'Nom du père, nom de la mère, date et lieu de naissance, n° registre...';
+    } else if (name.contains('décès') || name.contains('deces')) {
+      return 'Nom du défunt, date et lieu de décès, n° acte...';
+    } else if (name.contains('résidence') || name.contains('residence')) {
+      return 'Adresse complète, durée de résidence, motif de la demande...';
+    } else if (name.contains('mariage')) {
+      return 'Noms des époux, date et lieu du mariage, n° acte...';
+    }
+    return 'Précisez les informations nécessaires au traitement de votre demande...';
+  }
 
   @override
   void onInit() {
@@ -165,6 +184,10 @@ class RequestsController extends GetxController {
     }
   }
 
-  String _msg(DioException e) =>
-      e.error?.toString().split(':').last.trim() ?? 'Erreur réseau';
+  String _msg(DioException e) {
+    final rawMsg = e.response?.data?['message']?.toString() ??
+        e.error?.toString().split(':').last.trim() ??
+        'Erreur réseau';
+    return ErrorTranslator.translate(rawMsg);
+  }
 }

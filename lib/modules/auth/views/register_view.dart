@@ -13,14 +13,16 @@ class RegisterView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+          icon: const Icon(Icons.arrow_back_ios_rounded, color: AppColors.grey800),
           onPressed: () => Get.back(),
         ),
-        title: Text('Créer un compte', style: AppTextStyles.titleMedium),
+        title: Text('Créer un compte', style: AppTextStyles.titleMedium.copyWith(color: AppColors.grey900)),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: AppColors.grey800),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -75,10 +77,10 @@ class RegisterView extends GetView<AuthController> {
                     Container(
                       padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        color: AppColors.darkCard.withOpacity(0.65),
+                        color: AppColors.lightCard.withOpacity(0.85),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: AppColors.darkBorder.withOpacity(0.4),
+                          color: AppColors.lightBorder.withOpacity(0.8),
                           width: 1,
                         ),
                         boxShadow: [
@@ -98,13 +100,14 @@ class RegisterView extends GetView<AuthController> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               letterSpacing: -0.5,
+                              color: AppColors.grey900,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Créez votre espace citoyen numérique',
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.grey400,
+                              color: AppColors.grey600,
                             ),
                           ),
                           const SizedBox(height: 24),

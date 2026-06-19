@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/app_snackbar.dart';
+import '../../../core/utils/error_translator.dart';
 import '../../../data/models/document_model.dart';
 import '../../../data/repositories/document_repository.dart';
 
@@ -45,9 +46,10 @@ class QrController extends GetxController {
       final result = await _repo.verifyDocument(id);
       verificationResult.value = result;
     } on DioException catch (e) {
-      AppSnackbar.error(
-        e.error?.toString().split(':').last.trim() ?? 'Erreur de vérification',
-      );
+      final rawMsg = e.response?.data?['message']?.toString() ??
+          e.error?.toString().split(':').last.trim() ??
+          'Erreur de vérification';
+      AppSnackbar.error(ErrorTranslator.translate(rawMsg));
     } finally {
       isVerifying.value = false;
     }

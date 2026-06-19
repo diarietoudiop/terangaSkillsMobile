@@ -7,6 +7,7 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/status_utils.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/complaints_controller.dart';
+import '../../home/controller/home_controller.dart';
 
 class ComplaintsListView extends GetView<ComplaintsController> {
   const ComplaintsListView({super.key});
@@ -15,6 +16,14 @@ class ComplaintsListView extends GetView<ComplaintsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Iconsax.menu_1),
+          onPressed: () {
+            if (Get.isRegistered<HomeController>()) {
+              Get.find<HomeController>().openDrawer();
+            }
+          },
+        ),
         title: Text('Mes Réclamations', style: AppTextStyles.titleLarge),
         actions: [
           IconButton(
