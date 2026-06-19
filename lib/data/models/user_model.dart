@@ -8,6 +8,7 @@ class UserModel {
   final bool isActive;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final Map<String, dynamic>? service;
 
   const UserModel({
     required this.id,
@@ -19,12 +20,15 @@ class UserModel {
     required this.isActive,
     required this.createdAt,
     required this.updatedAt,
+    this.service,
   });
 
   String get fullName => '$firstName $lastName';
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    final map = (json['data'] is Map) ? json['data'] as Map<String, dynamic> : json;
+    final map = (json['data'] is Map)
+        ? json['data'] as Map<String, dynamic>
+        : json;
     return UserModel(
       id: map['id']?.toString() ?? map['_id']?.toString() ?? '',
       email: map['email']?.toString() ?? '',
@@ -39,20 +43,24 @@ class UserModel {
       updatedAt: map['updatedAt'] != null
           ? DateTime.tryParse(map['updatedAt'].toString()) ?? DateTime.now()
           : DateTime.now(),
+      service:
+          map['department'] as Map<String, dynamic>? ??
+          map['service'] as Map<String, dynamic>?,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'firstName': firstName,
-        'lastName': lastName,
-        'phone': phone,
-        'role': role,
-        'isActive': isActive,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'id': id,
+    'email': email,
+    'firstName': firstName,
+    'lastName': lastName,
+    'phone': phone,
+    'role': role,
+    'isActive': isActive,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+    'department': service,
+  };
 
   bool get isCitizen => role == 'CITIZEN';
   bool get isAdmin => role == 'ADMIN' || role == 'SUPER_ADMIN';

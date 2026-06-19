@@ -8,7 +8,7 @@ class DashboardController extends GetxController {
   final DashboardRepository _repo;
 
   DashboardController({DashboardRepository? repo})
-      : _repo = repo ?? DashboardRepository();
+    : _repo = repo ?? DashboardRepository();
 
   final isLoading = false.obs;
   final stats = Rxn<DashboardStatsModel>();
@@ -24,8 +24,10 @@ class DashboardController extends GetxController {
       isLoading.value = true;
       stats.value = await _repo.getStats();
     } on DioException catch (e) {
-      AppSnackbar.error(e.error?.toString().split(':').last.trim() ??
-          'Impossible de charger les statistiques');
+      AppSnackbar.error(
+        e.error?.toString().split(':').last.trim() ??
+            'Impossible de charger les statistiques',
+      );
     } finally {
       isLoading.value = false;
     }

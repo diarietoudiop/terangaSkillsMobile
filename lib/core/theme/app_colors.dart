@@ -43,13 +43,18 @@ class AppColors {
   static const Color grey900 = Color(0xFF111827);
 
   // Dark Theme Backgrounds (Dynamic getters to adapt to ThemeMode instantly)
-  static Color get darkBackground => Get.isDarkMode ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
-  static Color get darkSurface => Get.isDarkMode ? const Color(0xFF1E293B) : const Color(0xFFFFFFFF);
-  static Color get darkCard => Get.isDarkMode ? const Color(0xFF243044) : const Color(0xFFFFFFFF);
-  static Color get darkBorder => Get.isDarkMode ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
+  static Color get darkBackground =>
+      Get.isDarkMode ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+  static Color get darkSurface =>
+      Get.isDarkMode ? const Color(0xFF1E293B) : const Color(0xFFFFFFFF);
+  static Color get darkCard =>
+      Get.isDarkMode ? const Color(0xFF243044) : const Color(0xFFFFFFFF);
+  static Color get darkBorder =>
+      Get.isDarkMode ? const Color(0xFF334155) : const Color(0xFFE2E8F0);
 
   // Dynamic Text colors
-  static Color get text => Get.isDarkMode ? Colors.white : const Color(0xFF111827);
+  static Color get text =>
+      Get.isDarkMode ? Colors.white : const Color(0xFF111827);
 
   // Light Theme Backgrounds
   static const Color lightBackground = Color(0xFFF8FAFC);

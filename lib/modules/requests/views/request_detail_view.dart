@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/status_utils.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../controller/requests_controller.dart';
 
 class RequestDetailView extends GetView<RequestsController> {
@@ -30,7 +31,8 @@ class RequestDetailView extends GetView<RequestsController> {
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary));
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
         final req = controller.selectedRequest.value;
         if (req == null) return const SizedBox.shrink();
@@ -44,17 +46,22 @@ class RequestDetailView extends GetView<RequestsController> {
               _StatusBanner(status: req.status),
               const SizedBox(height: 24),
               // ─── Info Card ──────────────────────────
-              _InfoCard(label: 'Type', value: StatusUtils.requestTypeLabel(req.type)),
+              _InfoCard(
+                label: 'Type',
+                value: StatusUtils.requestTypeLabel(req.type),
+              ),
               _InfoCard(label: 'Titre', value: req.title),
               _InfoCard(label: 'Description', value: req.description),
               _InfoCard(
-                  label: 'Date de soumission',
-                  value:
-                      '${req.createdAt.day}/${req.createdAt.month}/${req.createdAt.year}'),
+                label: 'Date de soumission',
+                value:
+                    '${req.createdAt.day}/${req.createdAt.month}/${req.createdAt.year}',
+              ),
               if (req.assignedAgent != null)
                 _InfoCard(
-                    label: 'Agent assigné',
-                    value: req.assignedAgent!.fullName),
+                  label: 'Agent assigné',
+                  value: req.assignedAgent!.fullName,
+                ),
               const SizedBox(height: 24),
               // ─── Timeline ───────────────────────────
               if (req.history != null && req.history!.isNotEmpty) ...[
@@ -62,10 +69,119 @@ class RequestDetailView extends GetView<RequestsController> {
                 const SizedBox(height: 16),
                 ...req.history!.map((log) => _TimelineItem(log: log)),
               ],
+              const SizedBox(height: 24),
+              // ─── Actions ────────────────────────────
+              _buildActions(context, req),
             ],
           ),
         );
       }),
+    );
+  }
+
+  Widget _buildActions(BuildContext context, req) {
+    final auth = Get.find<AuthController>();
+    final isAgent = auth.currentUser.value?.isAgent ?? false;
+
+    if (isAgent) {
+      if (req.status != 'COMPLETED') {
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () => _showGenerateDocumentDialog(context, req.id),
+            icon: const Icon(Icons.check_circle_outline),
+            label: const Text(
+              'Terminer & Envoyer Document',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.success,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        );
+      }
+    } else {
+      // Citizen
+      if (req.status == 'COMPLETED') {
+        return SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              // Mock download action
+              Get.snackbar(
+                'Téléchargement',
+                'Le document est en cours de téléchargement...',
+                backgroundColor: AppColors.primary.withOpacity(0.9),
+                colorText: Colors.white,
+              );
+            },
+            icon: const Icon(Icons.file_download, color: AppColors.primary),
+            label: const Text(
+              'Télécharger le document',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColors.primary, width: 2),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showGenerateDocumentDialog(BuildContext context, String requestId) {
+    String docContent = "";
+    Get.defaultDialog(
+      backgroundColor: AppColors.darkSurface,
+      title: 'Générer le Document',
+      titleStyle: AppTextStyles.titleMedium.copyWith(color: AppColors.text),
+      content: Column(
+        children: [
+          Text(
+            'Ce document sera envoyé au citoyen pour téléchargement.',
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey400),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.text),
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText: 'Contenu ou URL du document généré...',
+              hintStyle: TextStyle(color: AppColors.grey500),
+              filled: true,
+              fillColor: AppColors.darkCard,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: AppColors.darkBorder),
+              ),
+            ),
+            onChanged: (val) => docContent = val,
+          ),
+        ],
+      ),
+      textConfirm: 'Générer et Terminer',
+      textCancel: 'Annuler',
+      confirmTextColor: Colors.white,
+      cancelTextColor: AppColors.primary,
+      buttonColor: AppColors.primary,
+      onConfirm: () {
+        Get.back();
+        // Call the API to generate the document
+        controller.generateDocumentAndComplete(requestId, docContent);
+      },
     );
   }
 }
@@ -137,7 +253,10 @@ class _InfoCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.darkCard.withOpacity(0.55),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder.withOpacity(0.4), width: 0.8),
+          border: Border.all(
+            color: AppColors.darkBorder.withOpacity(0.4),
+            width: 0.8,
+          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,9 +274,7 @@ class _InfoCard extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  height: 1.4,
-                ),
+                style: AppTextStyles.bodyMedium.copyWith(height: 1.4),
               ),
             ),
           ],

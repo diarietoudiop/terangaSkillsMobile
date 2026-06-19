@@ -11,7 +11,7 @@ class ComplaintsController extends GetxController {
   final ComplaintRepository _repo;
 
   ComplaintsController({ComplaintRepository? repo})
-      : _repo = repo ?? ComplaintRepository();
+    : _repo = repo ?? ComplaintRepository();
 
   final isLoading = false.obs;
   final isSubmitting = false.obs;
@@ -78,7 +78,9 @@ class ComplaintsController extends GetxController {
   Future<void> pickPhoto() async {
     final picker = ImagePicker();
     final file = await picker.pickImage(
-        source: ImageSource.camera, imageQuality: 80);
+      source: ImageSource.camera,
+      imageQuality: 80,
+    );
     if (file != null) pickedPhoto.value = file;
   }
 

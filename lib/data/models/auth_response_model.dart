@@ -2,14 +2,14 @@ class AuthResponseModel {
   final String accessToken;
   final Map<String, dynamic> user;
 
-  const AuthResponseModel({
-    required this.accessToken,
-    required this.user,
-  });
+  const AuthResponseModel({required this.accessToken, required this.user});
 
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
-    final map = (json['data'] is Map) ? json['data'] as Map<String, dynamic> : json;
-    final token = map['access_token']?.toString() ??
+    final map = (json['data'] is Map)
+        ? json['data'] as Map<String, dynamic>
+        : json;
+    final token =
+        map['access_token']?.toString() ??
         map['accessToken']?.toString() ??
         map['token']?.toString() ??
         json['access_token']?.toString() ??
@@ -23,8 +23,5 @@ class AuthResponseModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'access_token': accessToken,
-        'user': user,
-      };
+  Map<String, dynamic> toJson() => {'access_token': accessToken, 'user': user};
 }

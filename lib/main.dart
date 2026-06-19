@@ -58,7 +58,7 @@ class TerangaSkillsApp extends StatelessWidget {
     }
 
     return GetMaterialApp(
-      title: 'TerangaSkills',
+      title: 'CIVILINK',
       debugShowCheckedModeBanner: false,
 
       // Theme

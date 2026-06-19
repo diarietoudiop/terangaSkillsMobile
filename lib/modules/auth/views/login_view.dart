@@ -16,7 +16,6 @@ class LoginView extends GetView<AuthController> {
     return Scaffold(
       body: Stack(
         children: [
-          // ─── Decorative Blurred Background Blobs ───
           Positioned(
             top: -100,
             left: -100,
@@ -52,7 +51,10 @@ class LoginView extends GetView<AuthController> {
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -60,7 +62,6 @@ class LoginView extends GetView<AuthController> {
                     const Center(child: TsLogo()),
                     const SizedBox(height: 40),
 
-                    // ─── Form Card (Glassmorphic) ───
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -82,7 +83,7 @@ class LoginView extends GetView<AuthController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Bon retour 👋',
+                            'Bon retour',
                             style: AppTextStyles.headlineSmall.copyWith(
                               fontWeight: FontWeight.bold,
                               letterSpacing: -0.5,
@@ -106,56 +107,62 @@ class LoginView extends GetView<AuthController> {
                             prefixIcon: Icons.email_outlined,
                           ),
                           const SizedBox(height: 18),
-                          Obx(() => AuthTextField(
-                                controller: controller.loginPasswordController.value,
-                                label: 'Mot de passe',
-                                hint: '••••••••',
-                                obscureText: !controller.isPasswordVisible.value,
-                                prefixIcon: Icons.lock_outline,
-                                suffixIcon: GestureDetector(
-                                  onTap: controller.togglePasswordVisibility,
-                                  child: Icon(
-                                    controller.isPasswordVisible.value
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: AppColors.grey500,
-                                    size: 20,
-                                  ),
+                          Obx(
+                            () => AuthTextField(
+                              controller:
+                                  controller.loginPasswordController.value,
+                              label: 'Mot de passe',
+                              hint: '••••••••',
+                              obscureText: !controller.isPasswordVisible.value,
+                              prefixIcon: Icons.lock_outline,
+                              suffixIcon: GestureDetector(
+                                onTap: controller.togglePasswordVisibility,
+                                child: Icon(
+                                  controller.isPasswordVisible.value
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.grey500,
+                                  size: 20,
                                 ),
-                              )),
+                              ),
+                            ),
+                          ),
                           const SizedBox(height: 32),
 
                           // ─── Login Button ───
-                          Obx(() => SizedBox(
-                                width: double.infinity,
-                                height: 52,
-                                child: ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : controller.login,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.primary,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    elevation: 0,
+                          Obx(
+                            () => SizedBox(
+                              width: double.infinity,
+                              height: 52,
+                              child: ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.login,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
                                   ),
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                          width: 22,
-                                          height: 22,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2.5,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : Text('Se connecter',
-                                          style: AppTextStyles.buttonText.copyWith(
-                                            color: Colors.white,
-                                          )),
+                                  elevation: 0,
                                 ),
-                              )),
+                                child: controller.isLoading.value
+                                    ? const SizedBox(
+                                        width: 22,
+                                        height: 22,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Se connecter',
+                                        style: AppTextStyles.buttonText
+                                            .copyWith(color: Colors.white),
+                                      ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

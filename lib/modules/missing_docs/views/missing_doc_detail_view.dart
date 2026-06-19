@@ -26,12 +26,16 @@ class MissingDocDetailView extends GetView<MissingDocsController> {
           icon: const Icon(Icons.arrow_back_ios_rounded),
           onPressed: Get.back,
         ),
-        title: Text('Détail du document perdu', style: AppTextStyles.titleMedium),
+        title: Text(
+          'Détail du document perdu',
+          style: AppTextStyles.titleMedium,
+        ),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary));
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         }
         final doc = controller.selectedDoc.value;
         if (doc == null) return const SizedBox.shrink();
@@ -61,8 +65,11 @@ class MissingDocDetailView extends GetView<MissingDocsController> {
                       decoration: BoxDecoration(
                         color: AppColors.error.withOpacity(0.1),
                       ),
-                      child: const Icon(Icons.broken_image_rounded,
-                          color: AppColors.error, size: 48),
+                      child: const Icon(
+                        Icons.broken_image_rounded,
+                        color: AppColors.error,
+                        size: 48,
+                      ),
                     ),
                   ),
                 ),
@@ -76,22 +83,28 @@ class MissingDocDetailView extends GetView<MissingDocsController> {
               // ─── Info Card ──────────────────────────
               _InfoCard(label: 'Titre', value: doc.title),
               _InfoCard(label: 'Description', value: doc.description),
-              
+
               if (doc.lastSeenLocation != null)
-                _InfoCard(label: 'Dernier lieu vu', value: doc.lastSeenLocation!),
-                
+                _InfoCard(
+                  label: 'Dernier lieu vu',
+                  value: doc.lastSeenLocation!,
+                ),
+
               _InfoCard(
-                  label: 'Signalé le',
-                  value:
-                      '${doc.createdAt.day}/${doc.createdAt.month}/${doc.createdAt.year}'),
-              
+                label: 'Signalé le',
+                value:
+                    '${doc.createdAt.day}/${doc.createdAt.month}/${doc.createdAt.year}',
+              ),
+
               if (doc.hasLocation)
                 _InfoCard(
-                    label: 'Position GPS',
-                    value: '${doc.latitude!.toStringAsFixed(4)}, ${doc.longitude!.toStringAsFixed(4)}'),
+                  label: 'Position GPS',
+                  value:
+                      '${doc.latitude!.toStringAsFixed(4)}, ${doc.longitude!.toStringAsFixed(4)}',
+                ),
 
               const SizedBox(height: 24),
-              
+
               // ─── Timeline ───────────────────────────
               if (doc.history != null && doc.history!.isNotEmpty) ...[
                 Text('Historique', style: AppTextStyles.titleMedium),
@@ -173,7 +186,10 @@ class _InfoCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.darkCard.withOpacity(0.55),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder.withOpacity(0.4), width: 0.8),
+          border: Border.all(
+            color: AppColors.darkBorder.withOpacity(0.4),
+            width: 0.8,
+          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,9 +207,7 @@ class _InfoCard extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  height: 1.4,
-                ),
+                style: AppTextStyles.bodyMedium.copyWith(height: 1.4),
               ),
             ),
           ],

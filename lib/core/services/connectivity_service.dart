@@ -14,7 +14,9 @@ class ConnectivityService extends GetxService {
   void onInit() {
     super.onInit();
     _checkInitialConnection();
-    _subscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _subscription = _connectivity.onConnectivityChanged.listen(
+      _updateConnectionStatus,
+    );
   }
 
   @override
@@ -33,7 +35,7 @@ class ConnectivityService extends GetxService {
   void _updateConnectionStatus(List<ConnectivityResult> result) {
     // connectivity_plus v6/v7 returns a list. If it has only 'none', then there's no connection.
     final hasNet = !result.contains(ConnectivityResult.none);
-    
+
     if (hasNet != isConnected.value) {
       isConnected.value = hasNet;
       if (!hasNet) {
@@ -50,7 +52,11 @@ class ConnectivityService extends GetxService {
     Get.rawSnackbar(
       titleText: const Text(
         'Connexion perdue',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       ),
       messageText: const Text(
         'Veuillez vérifier votre connexion internet.',
@@ -69,7 +75,7 @@ class ConnectivityService extends GetxService {
           color: Colors.black.withOpacity(0.3),
           blurRadius: 10,
           offset: const Offset(0, 4),
-        )
+        ),
       ],
     );
   }
@@ -79,7 +85,11 @@ class ConnectivityService extends GetxService {
     Get.rawSnackbar(
       titleText: const Text(
         'Connexion rétablie',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       ),
       messageText: const Text(
         'Vous êtes à nouveau en ligne.',
@@ -96,7 +106,7 @@ class ConnectivityService extends GetxService {
           color: Colors.black.withOpacity(0.3),
           blurRadius: 10,
           offset: const Offset(0, 4),
-        )
+        ),
       ],
     );
   }

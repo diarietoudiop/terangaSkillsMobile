@@ -11,17 +11,18 @@ class ApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: AppConstants.baseUrl,
-        connectTimeout: const Duration(milliseconds: AppConstants.connectTimeout),
-        receiveTimeout: const Duration(milliseconds: AppConstants.receiveTimeout),
+        connectTimeout: const Duration(
+          milliseconds: AppConstants.connectTimeout,
+        ),
+        receiveTimeout: const Duration(
+          milliseconds: AppConstants.receiveTimeout,
+        ),
         contentType: 'application/json',
         responseType: ResponseType.json,
       ),
     );
 
-    _dio.interceptors.addAll([
-      AuthInterceptor(),
-      ErrorInterceptor(),
-    ]);
+    _dio.interceptors.addAll([AuthInterceptor(), ErrorInterceptor()]);
   }
 
   factory ApiClient() {
@@ -41,11 +42,16 @@ class ApiClient {
   Future<Response> getMe() => _dio.get('/auth/me');
 
   // ─── ADMINISTRATIVE REQUESTS ───────────────────────────
-  Future<Response> createAdminRequest(FormData formData, {ProgressCallback? onSendProgress}) =>
-      _dio.post('/administrative-requests', data: formData, onSendProgress: onSendProgress);
+  Future<Response> createAdminRequest(
+    FormData formData, {
+    ProgressCallback? onSendProgress,
+  }) => _dio.post(
+    '/administrative-requests',
+    data: formData,
+    onSendProgress: onSendProgress,
+  );
 
-  Future<Response> getAdminRequests() =>
-      _dio.get('/administrative-requests');
+  Future<Response> getAdminRequests() => _dio.get('/administrative-requests');
 
   Future<Response> getMyAdminRequests() =>
       _dio.get('/administrative-requests/my-requests');
@@ -56,17 +62,20 @@ class ApiClient {
   Future<Response> updateAdminRequest(String id, Map<String, dynamic> data) =>
       _dio.patch('/administrative-requests/$id', data: data);
 
-  Future<Response> updateAdminRequestStatus(String id, String status) =>
-      _dio.patch('/administrative-requests/$id/status', data: {'status': status});
+  Future<Response> updateAdminRequestStatus(String id, String status) => _dio
+      .patch('/administrative-requests/$id/status', data: {'status': status});
 
-  Future<Response> assignAgentToRequest(String id, String agentId) =>
-      _dio.patch('/administrative-requests/$id/assign', data: {'agentId': agentId});
+  Future<Response> assignAgentToRequest(String id, String agentId) => _dio
+      .patch('/administrative-requests/$id/assign', data: {'agentId': agentId});
 
   Future<Response> deleteAdminRequest(String id) =>
       _dio.delete('/administrative-requests/$id');
 
   // ─── COMPLAINTS ────────────────────────────────────────
-  Future<Response> createComplaint(FormData formData, {ProgressCallback? onSendProgress}) =>
+  Future<Response> createComplaint(
+    FormData formData, {
+    ProgressCallback? onSendProgress,
+  }) =>
       _dio.post('/complaints', data: formData, onSendProgress: onSendProgress);
 
   Future<Response> getComplaints() => _dio.get('/complaints');
@@ -81,20 +90,27 @@ class ApiClient {
   Future<Response> updateComplaintStatus(String id, String status) =>
       _dio.patch('/complaints/$id/status', data: {'status': status});
 
-  Future<Response> deleteComplaint(String id) =>
-      _dio.delete('/complaints/$id');
+  Future<Response> deleteComplaint(String id) => _dio.delete('/complaints/$id');
 
   // ─── MISSING DOCUMENTS ─────────────────────────────────
-  Future<Response> createMissingDocument(FormData formData, {ProgressCallback? onSendProgress}) =>
-      _dio.post('/missing-documents', data: formData, onSendProgress: onSendProgress);
+  Future<Response> createMissingDocument(
+    FormData formData, {
+    ProgressCallback? onSendProgress,
+  }) => _dio.post(
+    '/missing-documents',
+    data: formData,
+    onSendProgress: onSendProgress,
+  );
 
   Future<Response> getMissingDocuments() => _dio.get('/missing-documents');
 
   Future<Response> getMissingDocument(String id) =>
       _dio.get('/missing-documents/$id');
 
-  Future<Response> updateMissingDocument(String id, Map<String, dynamic> data) =>
-      _dio.patch('/missing-documents/$id', data: data);
+  Future<Response> updateMissingDocument(
+    String id,
+    Map<String, dynamic> data,
+  ) => _dio.patch('/missing-documents/$id', data: data);
 
   Future<Response> updateMissingDocumentStatus(String id, String status) =>
       _dio.patch('/missing-documents/$id/status', data: {'status': status});
@@ -104,14 +120,29 @@ class ApiClient {
 
   // ─── DOCUMENTS / QR ────────────────────────────────────
   Future<Response> generateDocument(
-          String requestId, String name, String content) =>
-      _dio.post('/documents/generate/$requestId',
-          data: {'name': name, 'content': content});
+    String requestId,
+    String name,
+    String content,
+  ) => _dio.post(
+    '/documents/generate/$requestId',
+    data: {'name': name, 'content': content},
+  );
 
   Future<Response> verifyDocument(String id) =>
       _dio.get('/documents/verify/$id');
 
+  // ─── DEPARTMENTS / SERVICES ────────────────────────────
+  Future<Response> getDepartments() => _dio.get('/departments');
+
+  Future<Response> getRequestTypes() =>
+      _dio.get('/departments/request-types/all');
+
+  // ─── INVESTMENT PROJECTS ───────────────────────────────
+  Future<Response> getInvestmentProjects() => _dio.get('/investment-projects');
+
+  Future<Response> getInvestmentProject(String id) =>
+      _dio.get('/investment-projects/$id');
+
   // ─── DASHBOARD ─────────────────────────────────────────
-  Future<Response> getDashboardStats() =>
-      _dio.get('/dashboard/statistics');
+  Future<Response> getDashboardStats() => _dio.get('/dashboard/statistics');
 }

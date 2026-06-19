@@ -60,26 +60,26 @@ class MissingDocumentModel {
           : DateTime.now(),
       history: map['history'] != null
           ? (map['history'] as List)
-              .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
-              .toList()
+                .map((e) => ActionLogModel.fromJson(e as Map<String, dynamic>))
+                .toList()
           : null,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'photoUrl': photoUrl,
-        'lastSeenLocation': lastSeenLocation,
-        'latitude': latitude,
-        'longitude': longitude,
-        'status': status,
-        'isVerified': isVerified,
-        'reportedById': reportedById,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt.toIso8601String(),
-      };
+    'id': id,
+    'title': title,
+    'description': description,
+    'photoUrl': photoUrl,
+    'lastSeenLocation': lastSeenLocation,
+    'latitude': latitude,
+    'longitude': longitude,
+    'status': status,
+    'isVerified': isVerified,
+    'reportedById': reportedById,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+  };
 
   bool get hasLocation => latitude != null && longitude != null;
   bool get isFound => status == 'FOUND';

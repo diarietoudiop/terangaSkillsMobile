@@ -42,8 +42,10 @@ class RequestsListView extends GetView<RequestsController> {
                 date: req.createdAt,
                 onTap: () {
                   controller.selectedRequest.value = req;
-                  Get.toNamed(AppRoutes.requestDetail,
-                      arguments: {'id': req.id});
+                  Get.toNamed(
+                    AppRoutes.requestDetail,
+                    arguments: {'id': req.id},
+                  );
                 },
               );
             },
@@ -141,10 +143,7 @@ class _RequestCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.darkCard.withOpacity(0.55),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: statusColor.withOpacity(0.22),
-          width: 0.8,
-        ),
+        border: Border.all(color: statusColor.withOpacity(0.22), width: 0.8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
@@ -201,7 +200,9 @@ class _RequestCard extends StatelessWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: statusColor.withOpacity(0.12),
                               borderRadius: BorderRadius.circular(6),
@@ -218,9 +219,7 @@ class _RequestCard extends StatelessWidget {
                           const Spacer(),
                           Text(
                             '${date.day}/${date.month}/${date.year}',
-                            style: AppTextStyles.caption.copyWith(
-                              fontSize: 11,
-                            ),
+                            style: AppTextStyles.caption.copyWith(fontSize: 11),
                           ),
                         ],
                       ),
