@@ -8,6 +8,7 @@ import '../../../core/utils/status_utils.dart';
 import '../../../routes/app_routes.dart';
 import '../controller/requests_controller.dart';
 import '../../home/controller/home_controller.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class RequestsListView extends GetView<RequestsController> {
   const RequestsListView({super.key});

@@ -108,8 +108,39 @@ class AiChatController extends GetxController {
   Future<void> submitAssistRequest(String type, String title, String description) async {
     try {
       isSubmitting.value = true;
+
+      String? requestTypeId;
+      if (Get.isRegistered<RequestsController>()) {
+        final reqCtrl = Get.find<RequestsController>();
+        final types = reqCtrl.requestTypes;
+        if (types.isNotEmpty) {
+          final matched = types.firstWhereOrNull(
+            (t) => t.name.toLowerCase().contains(type.toLowerCase()) || 
+                   type.toLowerCase().contains(t.name.toLowerCase())
+          );
+          requestTypeId = matched?.id ?? types.first.id;
+        }
+      }
+
+      if (requestTypeId == null) {
+        final reqCtrl = Get.put(RequestsController());
+        await reqCtrl.fetchRequestTypes();
+        final types = reqCtrl.requestTypes;
+        if (types.isNotEmpty) {
+          final matched = types.firstWhereOrNull(
+            (t) => t.name.toLowerCase().contains(type.toLowerCase()) || 
+                   type.toLowerCase().contains(t.name.toLowerCase())
+          );
+          requestTypeId = matched?.id ?? types.first.id;
+        }
+      }
+
+      if (requestTypeId == null || requestTypeId.isEmpty) {
+        throw Exception("Aucun type de demande configuré par la mairie.");
+      }
+
       await _repo.createRequest(
-        type: type,
+        requestTypeId: requestTypeId,
         title: title,
         description: description,
       );

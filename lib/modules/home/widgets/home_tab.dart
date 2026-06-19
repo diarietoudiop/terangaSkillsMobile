@@ -15,6 +15,7 @@ class HomeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
     final homeController = Get.find<HomeController>();
+    final isAgent = auth.currentUser.value?.isAgent ?? false;
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       body: CustomScrollView(
@@ -173,7 +174,6 @@ class HomeTab extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   // ─── Recent Banner Premium ───
-                  final isAgent = auth.currentUser.value?.isAgent ?? false;
                   Text(
                     isAgent ? 'Dossiers Citoyens' : 'Mes dernières demandes',
                     style: AppTextStyles.titleMedium.copyWith(
